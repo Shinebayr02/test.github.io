@@ -49,7 +49,8 @@
       losses: 0,
       ties: 0
     };
-
+    document.querySelector(".js-moves-chosen").innerHTML = "";
+    document.querySelector(".js-result").innerHTML = "";
     updateScoreElement();
     localStorage.removeItem('score');
   }
