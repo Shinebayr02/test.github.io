@@ -54,7 +54,12 @@
     updateScoreElement();
     localStorage.removeItem('score');
   }
-
+function autoPlay(){
+    setInterval(function(){
+        const playerMove = pickComputerMove();
+        makeMove(playerMove); 
+    }, 1000);
+  }
   function pickComputerMove() {
     const randomNumber = Math.random();
     let computerMove;
