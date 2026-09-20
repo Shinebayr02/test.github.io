@@ -1,77 +1,72 @@
+```html
 <!DOCTYPE html>
 <html lang="mn">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0,
+               maximum-scale=1.0, user-scalable=no">
 
-<title>Чам руу хүрэх зам</title>
+<title>Чам руу хүрэх зам 💗</title>
 
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 
-:root {
-    --pink: #ff4f9a;
-    --pink2: #ff86bd;
-    --purple: #6b3fa0;
-    --dark: #120d1c;
-    --night: #211735;
-    --cream: #ffe9c7;
-    --green: #63c174;
-    --yellow: #ffd75a;
+:root{
+    --pink:#ff5c9d;
+    --pink2:#ff9bc7;
+    --purple:#6c4ab6;
+    --dark:#100c19;
+    --cream:#ffe9c7;
+    --yellow:#ffd95a;
+    --green:#65c779;
 }
 
-* {
-    box-sizing: border-box;
-    -webkit-tap-highlight-color: transparent;
+*{
+    box-sizing:border-box;
+    -webkit-tap-highlight-color:transparent;
 }
 
-html,
-body {
-    margin: 0;
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    background: #09070e;
-    font-family: "Press Start 2P", monospace;
-    color: white;
+html,body{
+    margin:0;
+    width:100%;
+    height:100%;
+    overflow:hidden;
+    background:#08060d;
+    font-family:"Press Start 2P",monospace;
 }
 
-body {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+body{
+    display:flex;
+    align-items:center;
+    justify-content:center;
 }
 
-/* =========================
-   GAME
-========================= */
-
-#game-wrapper {
-    position: relative;
-    width: min(100vw, 1100px);
-    height: min(100vh, 700px);
-    background: var(--night);
-    overflow: hidden;
-    image-rendering: pixelated;
+#game{
+    position:relative;
+    width:min(1200px,100vw);
+    height:min(760px,100vh);
+    overflow:hidden;
+    background:#171126;
 }
 
-canvas {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    image-rendering: pixelated;
+canvas{
+    width:100%;
+    height:100%;
+    image-rendering:pixelated;
 }
 
-/* =========================
-   CRT EFFECT
-========================= */
+/* ==============================
+   CRT
+================================*/
 
-#game-wrapper::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
+#game::after{
+    content:"";
+    position:absolute;
+    inset:0;
+    pointer-events:none;
+    z-index:100;
+
     background:
         repeating-linear-gradient(
             to bottom,
@@ -80,266 +75,379 @@ canvas {
             transparent 2px,
             transparent 4px
         );
-    z-index: 20;
 }
 
-/* =========================
+/* ==============================
    HUD
-========================= */
+================================*/
 
-#hud {
-    position: absolute;
-    top: 14px;
-    left: 14px;
-    right: 14px;
-    z-index: 10;
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    pointer-events: none;
+#hud{
+    position:absolute;
+    z-index:20;
+    top:12px;
+    left:12px;
+    right:12px;
+
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+
+    pointer-events:none;
 }
 
-.hud-box {
-    padding: 10px 12px;
-    background: rgba(18,13,28,.85);
-    border: 3px solid #fff;
-    box-shadow: 4px 4px 0 #000;
-    font-size: 9px;
-    line-height: 1.8;
+.box{
+    background:rgba(15,10,24,.88);
+    border:3px solid white;
+    box-shadow:5px 5px 0 #000;
+    color:white;
+    padding:9px 11px;
+
+    font-size:8px;
+    line-height:1.8;
 }
 
-#title-hud {
-    color: var(--pink2);
+#location{
+    color:var(--pink2);
 }
 
-#hearts {
-    color: var(--pink2);
-    letter-spacing: 4px;
+#hearts{
+    color:var(--pink2);
+    letter-spacing:3px;
 }
 
-#stars {
-    color: var(--yellow);
+#stars{
+    color:var(--yellow);
 }
 
-/* =========================
-   START SCREEN
-========================= */
+#letters{
+    color:#9bdcff;
+}
 
-.overlay {
-    position: absolute;
-    inset: 0;
-    z-index: 50;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
+/* ==============================
+   QUEST
+================================*/
+
+#quest{
+    position:absolute;
+    z-index:20;
+    top:70px;
+    left:12px;
+
+    max-width:350px;
+
+    background:rgba(15,10,24,.82);
+    border-left:4px solid var(--pink);
+
+    padding:10px 13px;
+
+    color:var(--cream);
+
+    font-size:7px;
+    line-height:2;
+}
+
+/* ==============================
+   OVERLAYS
+================================*/
+
+.overlay{
+    position:absolute;
+    inset:0;
+    z-index:80;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    padding:20px;
+
     background:
-        radial-gradient(circle at center, rgba(107,63,160,.35), transparent 60%),
-        rgba(9,7,14,.92);
+        radial-gradient(
+            circle at center,
+            rgba(108,74,182,.35),
+            transparent 60%
+        ),
+        rgba(8,6,13,.93);
 }
 
-.panel {
-    width: min(650px, 94vw);
-    padding: 35px 28px;
-    text-align: center;
-    background: #171020;
-    border: 5px solid white;
+.panel{
+    width:min(680px,95vw);
+
+    background:#171020;
+
+    border:5px solid white;
+
     box-shadow:
-        8px 8px 0 #000,
+        9px 9px 0 #000,
         0 0 0 5px var(--pink);
+
+    padding:35px 25px;
+
+    text-align:center;
 }
 
-.logo {
-    color: var(--pink2);
-    font-size: clamp(18px, 4vw, 32px);
-    line-height: 1.7;
-    text-shadow: 4px 4px 0 #552454;
+.logo{
+    color:var(--pink2);
+
+    font-size:
+        clamp(17px,4vw,32px);
+
+    line-height:1.7;
+
+    text-shadow:
+        4px 4px 0 #55244d;
 }
 
-.subtitle {
-    margin: 25px auto;
-    color: var(--cream);
-    font-size: 10px;
-    line-height: 2.2;
-    max-width: 520px;
+.subtitle{
+    margin:25px auto;
+
+    max-width:550px;
+
+    color:var(--cream);
+
+    font-size:9px;
+    line-height:2.4;
 }
 
-.pixel-button {
-    display: inline-block;
-    border: 0;
-    background: var(--pink);
-    color: white;
-    font-family: inherit;
-    font-size: 11px;
-    padding: 16px 20px;
-    cursor: pointer;
-    box-shadow: 5px 5px 0 #7b2351;
-    transition: transform .08s;
+.button{
+    border:0;
+
+    background:var(--pink);
+    color:white;
+
+    font-family:inherit;
+    font-size:10px;
+
+    padding:16px 22px;
+
+    cursor:pointer;
+
+    box-shadow:5px 5px 0 #76264e;
 }
 
-.pixel-button:hover {
-    transform: translate(2px,2px);
-    box-shadow: 3px 3px 0 #7b2351;
+.button:active{
+    transform:translate(5px,5px);
+    box-shadow:none;
 }
 
-.pixel-button:active {
-    transform: translate(5px,5px);
-    box-shadow: none;
-}
-
-/* =========================
+/* ==============================
    DIALOG
-========================= */
+================================*/
 
-#dialog {
-    position: absolute;
-    left: 5%;
-    right: 5%;
-    bottom: 30px;
-    z-index: 30;
-    display: none;
+#dialog{
+    position:absolute;
+
+    left:4%;
+    right:4%;
+    bottom:25px;
+
+    z-index:50;
+
+    display:none;
 }
 
-.dialog-box {
-    background: #120d1c;
-    border: 4px solid white;
-    box-shadow: 7px 7px 0 #000;
-    padding: 20px;
-    min-height: 100px;
+.dialogBox{
+    background:#110c18;
+
+    border:4px solid white;
+
+    box-shadow:7px 7px 0 #000;
+
+    padding:18px;
+
+    min-height:120px;
 }
 
-.dialog-name {
-    color: var(--pink2);
-    margin-bottom: 15px;
-    font-size: 10px;
+.dialogName{
+    color:var(--pink2);
+    font-size:9px;
+
+    margin-bottom:15px;
 }
 
-#dialog-text {
-    font-size: 10px;
-    line-height: 2.2;
-    color: var(--cream);
+#dialogText{
+    color:var(--cream);
+
+    font-size:9px;
+    line-height:2.2;
 }
 
-#dialog-next {
-    margin-top: 15px;
-    color: #aaa;
-    font-size: 8px;
+.next{
+    margin-top:13px;
+
+    color:#777;
+
+    font-size:7px;
 }
 
-/* =========================
+/* ==============================
+   NOTIFICATION
+================================*/
+
+#notification{
+    position:absolute;
+
+    top:50%;
+    left:50%;
+
+    transform:translate(-50%,-50%);
+
+    z-index:60;
+
+    display:none;
+
+    background:#171020;
+
+    border:4px solid white;
+
+    box-shadow:6px 6px 0 #000;
+
+    padding:18px 22px;
+
+    text-align:center;
+
+    color:var(--cream);
+
+    font-size:9px;
+    line-height:2;
+}
+
+/* ==============================
    FINAL
-========================= */
+================================*/
 
-#final-screen {
-    display: none;
+#final{
+    display:none;
 }
 
-.final-title {
-    color: var(--yellow);
-    font-size: clamp(17px, 4vw, 29px);
-    line-height: 1.7;
+.finalTitle{
+    color:var(--yellow);
+
+    font-size:
+        clamp(16px,4vw,28px);
+
+    line-height:1.8;
 }
 
-.final-heart {
-    font-size: 70px;
-    margin: 20px;
-    animation: heartbeat 1s infinite;
+.heart{
+    font-size:70px;
+
+    margin:20px;
+
+    animation:beat 1s infinite;
 }
 
-.final-message {
-    color: var(--cream);
-    font-size: 11px;
-    line-height: 2.4;
-}
-
-@keyframes heartbeat {
-    0%,100% { transform: scale(1); }
-    50% { transform: scale(1.15); }
-}
-
-/* =========================
-   MOBILE CONTROLS
-========================= */
-
-#controls {
-    position: absolute;
-    bottom: 18px;
-    left: 18px;
-    z-index: 25;
-    display: none;
-    width: 145px;
-    height: 145px;
-}
-
-.control {
-    position: absolute;
-    width: 48px;
-    height: 48px;
-    border: 3px solid white;
-    background: rgba(18,13,28,.8);
-    color: white;
-    font-family: inherit;
-    font-size: 15px;
-}
-
-.control:active {
-    background: var(--pink);
-}
-
-#up {
-    left: 48px;
-    top: 0;
-}
-
-#left {
-    left: 0;
-    top: 48px;
-}
-
-#down {
-    left: 48px;
-    top: 48px;
-}
-
-#right {
-    left: 96px;
-    top: 48px;
-}
-
-@media (max-width: 700px) {
-    #controls {
-        display: block;
+@keyframes beat{
+    0%,100%{
+        transform:scale(1);
     }
 
-    #hud {
-        top: 8px;
-        left: 8px;
-        right: 8px;
+    50%{
+        transform:scale(1.18);
+    }
+}
+
+.finalText{
+    color:var(--cream);
+
+    font-size:9px;
+    line-height:2.5;
+}
+
+/* ==============================
+   MOBILE
+================================*/
+
+#mobileControls{
+    position:absolute;
+
+    bottom:15px;
+    left:15px;
+
+    width:150px;
+    height:150px;
+
+    z-index:40;
+
+    display:none;
+}
+
+.control{
+    position:absolute;
+
+    width:48px;
+    height:48px;
+
+    border:3px solid white;
+
+    background:rgba(15,10,24,.75);
+
+    color:white;
+
+    font-family:inherit;
+
+    font-size:15px;
+}
+
+.control:active{
+    background:var(--pink);
+}
+
+#up{
+    left:50px;
+    top:0;
+}
+
+#left{
+    left:0;
+    top:50px;
+}
+
+#down{
+    left:50px;
+    top:50px;
+}
+
+#right{
+    left:100px;
+    top:50px;
+}
+
+@media(max-width:700px){
+
+    #mobileControls{
+        display:block;
     }
 
-    .hud-box {
-        font-size: 7px;
-        padding: 7px;
+    .box{
+        font-size:6px;
+        padding:6px;
     }
 
-    #dialog {
-        bottom: 15px;
+    #quest{
+        top:62px;
+        max-width:250px;
+        font-size:6px;
     }
 
-    .dialog-box {
-        padding: 13px;
+    #dialog{
+        bottom:12px;
     }
 
-    #dialog-text {
-        font-size: 8px;
+    #dialogText{
+        font-size:7px;
     }
 
-    .panel {
-        padding: 25px 16px;
+    .dialogBox{
+        padding:13px;
     }
 
-    .subtitle {
-        font-size: 8px;
+    .panel{
+        padding:25px 15px;
+    }
+
+    .subtitle{
+        font-size:7px;
     }
 }
 </style>
@@ -347,612 +455,1301 @@ canvas {
 
 <body>
 
-<div id="game-wrapper">
+<div id="game">
 
-    <canvas id="game"></canvas>
+<canvas id="canvas"></canvas>
 
-    <!-- HUD -->
-    <div id="hud">
-        <div class="hud-box" id="title-hud">
-            ЧАМ РУУ ХҮРЭХ ЗАМ
+<!-- HUD -->
+
+<div id="hud">
+
+    <div class="box">
+
+        <div id="location">
+            🌙 ШӨНИЙН АЯЛАЛ
         </div>
 
-        <div class="hud-box">
-            <div id="hearts">♡ ♡ ♡</div>
-            <div id="stars">★ 0</div>
+        <div id="hearts">
+            ♥ ♥ ♥ ♥ ♥
         </div>
-    </div>
-
-    <!-- START -->
-    <div class="overlay" id="start-screen">
-        <div class="panel">
-
-            <div class="logo">
-                ЧАМ РУУ<br>
-                ХҮРЭХ ЗАМ
-            </div>
-
-            <div class="subtitle">
-                Нэг жижигхэн адал явдал.<br><br>
-
-                Замдаа хэдэн од цуглуулж,<br>
-                хэдэн нууц олж,<br>
-                эцэст нь нэг хүнд хүрнэ.
-            </div>
-
-            <button class="pixel-button" onclick="startGame()">
-                ▶ ЭХЛҮҮЛЭХ
-            </button>
-
-            <div style="margin-top:25px;font-size:7px;color:#777;">
-                WASD / ARROW KEYS
-            </div>
-
-        </div>
-    </div>
-
-    <!-- DIALOG -->
-    <div id="dialog">
-        <div class="dialog-box">
-
-            <div class="dialog-name" id="dialog-name">
-                ?
-            </div>
-
-            <div id="dialog-text">
-            </div>
-
-            <div id="dialog-next">
-                [ SPACE / TAP ] ҮРГЭЛЖЛҮҮЛЭХ
-            </div>
-
-        </div>
-    </div>
-
-    <!-- MOBILE CONTROLS -->
-    <div id="controls">
-
-        <button class="control" id="up">▲</button>
-        <button class="control" id="left">◀</button>
-        <button class="control" id="down">▼</button>
-        <button class="control" id="right">▶</button>
 
     </div>
 
-    <!-- FINAL -->
-    <div class="overlay" id="final-screen">
+    <div class="box">
 
-        <div class="panel">
+        <div id="stars">
+            ★ 0 / 8
+        </div>
 
-            <div class="final-title">
-                ★ АМЖИЛТЫН ШАГНАЛ ★
-            </div>
-
-            <div class="final-heart">
-                ♥
-            </div>
-
-            <div class="final-message">
-
-                Чи бүх замыг тууллаа.<br><br>
-
-                Бүх одыг цуглуулсан эсэх<br>
-                үнэндээ хамаагүй.
-                <br><br>
-
-                Учир нь энэ тоглоомын<br>
-                хамгийн гоё хэсэг нь...
-                <br><br>
-
-                <strong style="color:#ff86bd;">
-                    чамайг инээлгэх гэж хийсэн явдал.
-                </strong>
-
-                <br><br>
-
-                — нэг developer-ээс 💗
-
-            </div>
-
-            <br>
-
-            <button class="pixel-button" onclick="location.reload()">
-                ↻ ДАХИН ТОГЛОХ
-            </button>
-
+        <div id="letters">
+            ✉ 0 / 3
         </div>
 
     </div>
 
 </div>
 
+<div id="quest">
+    📜 Даалгавар:<br>
+    Оддыг цуглуулж, нууц захидлуудыг ол.
+</div>
+
+
+<!-- START -->
+
+<div class="overlay" id="start">
+
+    <div class="panel">
+
+        <div class="logo">
+            ЧАМ РУУ<br>
+            ХҮРЭХ ЗАМ
+        </div>
+
+        <div class="subtitle">
+
+            🌙 Нэгэн орой нэгэн охин<br>
+            нэгэн хүнийг хайхаар аялалд гарчээ.
+            <br><br>
+
+            Зам нь урт.<br>
+            Ой нь харанхуй.<br>
+            Харин төгсгөлд нь хэн хүлээж байгаа бол?
+            <br><br>
+
+            <span style="color:#ff86bd">
+                Энэ бол зүгээр нэг тоглоом биш.
+            </span>
+
+        </div>
+
+        <button class="button"
+                onclick="startGame()">
+
+            ▶ АЯЛЛЫГ ЭХЛҮҮЛЭХ
+
+        </button>
+
+        <div style="
+            margin-top:25px;
+            font-size:6px;
+            color:#777;
+        ">
+            WASD / ARROW KEYS<br>
+            MOBILE → TOUCH CONTROL
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- DIALOG -->
+
+<div id="dialog">
+
+    <div class="dialogBox">
+
+        <div class="dialogName"
+             id="dialogName">
+            ???
+        </div>
+
+        <div id="dialogText">
+        </div>
+
+        <div class="next">
+            [ SPACE / TAP ] ҮРГЭЛЖЛҮҮЛЭХ
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- NOTIFICATION -->
+
+<div id="notification"></div>
+
+
+<!-- MOBILE -->
+
+<div id="mobileControls">
+
+    <button class="control" id="up">▲</button>
+    <button class="control" id="left">◀</button>
+    <button class="control" id="down">▼</button>
+    <button class="control" id="right">▶</button>
+
+</div>
+
+
+<!-- FINAL -->
+
+<div class="overlay" id="final">
+
+    <div class="panel">
+
+        <div class="finalTitle">
+            ★ АМЖИЛТЫН ШАГНАЛ ★
+        </div>
+
+        <div class="heart">
+            ♥
+        </div>
+
+        <div class="finalText">
+
+            Чи бүх замыг тууллаа.
+            <br><br>
+
+            Оддыг цуглуулсан.<br>
+            Нууц захидлуудыг олсон.<br>
+            Ойг туулсан.
+            <br><br>
+
+            Гэхдээ энэ аяллын<br>
+            хамгийн чухал шагнал нь...
+            <br><br>
+
+            <strong style="color:#ff86bd">
+
+                ЧАМАЙГ ИНЭЭЛГЭХ
+
+            </strong>
+
+            <br><br>
+
+            гэж хийсэн энэ жижигхэн ертөнц байлаа.
+            <br><br>
+
+            <span style="color:#aaa">
+
+                — нэг developer-ээс 💗
+
+            </span>
+
+        </div>
+
+        <br>
+
+        <button class="button"
+                onclick="location.reload()">
+
+            ↻ ДАХИН ТОГЛОХ
+
+        </button>
+
+    </div>
+
+</div>
+
+
 <script>
 
-/* =====================================================
-   SETTINGS — ЭНДЭЭС ӨӨРИЙНХӨӨРӨӨ ӨӨРЧИЛ
-===================================================== */
+/* =========================================================
+   CUSTOM SETTINGS
+========================================================= */
 
-const CRUSH_NAME = "НЭР";
+const CRUSH_NAME = "ШИНЭБАЯР";
 
-const NPC_MESSAGES = [
-    "Сайн уу! Чи энд юу хайж явна?",
-    "Энд нэг хүн чамайг хүлээж байгаа гэсэн.",
-    "Гэхдээ эхлээд замдаа хэдэн од цуглуулаарай.",
-    "Яагаад гэдгийг нь төгсгөлд мэднэ. :)"
+/*
+    ЭНЭ ХЭСГИЙГ ӨӨРИЙНХӨӨРӨӨ ӨӨРЧИЛЖ БОЛНО.
+*/
+
+const letters = [
+
+    "Зарим хүмүүс амьдралд зүгээр л орж ирдэг.",
+
+    "Харин зарим хүн орж ирээд\nөдрийг чинь арай гоё болгодог.",
+
+    "Магадгүй чи аль нь болохоо өөрөө мэдэх байх. :)"
+
 ];
 
-/* =====================================================
+const npcs = [
+
+    {
+        x:700,
+        y:500,
+        name:"🌸 Цэцэрлэгийн охин",
+
+        text:[
+            "Чи эндүүрчихсэн юм биш биз?",
+            "Эндээс цааш явах зам харанхуй.",
+            "Гэхдээ айх хэрэггүй.",
+            "Чи хайж байгаа хүнээ олно."
+        ]
+    },
+
+    {
+        x:1120,
+        y:310,
+        name:"☕ Кофе зардаг ах",
+
+        text:[
+            "Оройн мэнд.",
+            "Нэг кофе авах уу?",
+            "Үнэгүй шүү.",
+            "Яагаад гэвэл өнөөдөр чи зоригтой аялж байна."
+        ]
+    },
+
+    {
+        x:1550,
+        y:620,
+        name:"🐱 Муур",
+
+        text:[
+            "Мяааау.",
+            "Мяау мяау.",
+            "...",
+            "Чамайг хэн нэгэн хүлээж байгаа."
+        ]
+    },
+
+    {
+        x:1950,
+        y:280,
+        name:"🌙 Нууцлаг хүн",
+
+        text:[
+            "Чи их хол явжээ.",
+            "Тэр хүн ойрхон байгаа.",
+            "Гэхдээ эхлээд сүүлчийн одоо ол.",
+            "Тэгвэл хаалга нээгдэнэ."
+        ]
+    }
+
+];
+
+
+/* =========================================================
    CANVAS
-===================================================== */
+========================================================= */
 
-const canvas = document.getElementById("game");
-const ctx = canvas.getContext("2d");
+const canvas =
+    document.getElementById("canvas");
 
-let W = 1000;
-let H = 650;
+const ctx =
+    canvas.getContext("2d");
 
-function resize() {
+const WORLD_W = 2400;
+const WORLD_H = 1300;
 
-    const rect = canvas.getBoundingClientRect();
+let VIEW_W = 1200;
+let VIEW_H = 760;
 
-    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+function resize(){
 
-    canvas.width = rect.width * dpr;
-    canvas.height = rect.height * dpr;
+    const rect =
+        canvas.getBoundingClientRect();
 
-    ctx.setTransform(
-        dpr * rect.width / W,
-        0,
-        0,
-        dpr * rect.height / H,
-        0,
-        0
-    );
+    canvas.width =
+        rect.width *
+        Math.min(devicePixelRatio || 1,2);
+
+    canvas.height =
+        rect.height *
+        Math.min(devicePixelRatio || 1,2);
+
+    VIEW_W = rect.width;
+    VIEW_H = rect.height;
+
 }
 
-window.addEventListener("resize", resize);
+window.addEventListener(
+    "resize",
+    resize
+);
 
-/* =====================================================
-   GAME STATE
-===================================================== */
+resize();
 
-let running = false;
-let finished = false;
+
+/* =========================================================
+   PLAYER
+========================================================= */
 
 const player = {
-    x: 110,
-    y: 520,
-    w: 28,
-    h: 28,
-    speed: 3.5,
-    frame: 0
+
+    x:180,
+    y:1050,
+
+    width:30,
+    height:44,
+
+    speed:4,
+
+    direction:"right",
+
+    walk:0,
+
+    hair:"#39253b",
+
+    dress:"#ff5c9d",
+
+    skin:"#f1c4a3"
+
 };
 
-let starsCollected = 0;
 
-const keys = {};
+/* =========================================================
+   CAMERA
+========================================================= */
 
-let stars = [
-    {x:230, y:440, taken:false},
-    {x:350, y:300, taken:false},
-    {x:510, y:470, taken:false},
-    {x:650, y:250, taken:false},
-    {x:780, y:410, taken:false},
-    {x:870, y:180, taken:false}
+const camera = {
+    x:0,
+    y:0
+};
+
+
+/* =========================================================
+   GAME STATE
+========================================================= */
+
+let started=false;
+let finished=false;
+
+let starsCollected=0;
+let lettersCollected=0;
+
+let dialogOpen=false;
+
+const keys={};
+
+
+/* =========================================================
+   STARS
+========================================================= */
+
+const stars = [
+
+    {x:360,y:980},
+    {x:560,y:790},
+    {x:810,y:1040},
+    {x:1040,y:620},
+    {x:1280,y:920},
+    {x:1510,y:520},
+    {x:1820,y:850},
+    {x:2100,y:430}
+
 ];
 
-const npc = {
-    x: 450,
-    y: 160,
-    w: 28,
-    h: 38
+stars.forEach(s=>{
+    s.taken=false;
+});
+
+
+/* =========================================================
+   LETTERS
+========================================================= */
+
+const letterObjects = [
+
+    {
+        x:470,
+        y:920,
+        taken:false
+    },
+
+    {
+        x:1330,
+        y:740,
+        taken:false
+    },
+
+    {
+        x:1840,
+        y:650,
+        taken:false
+    }
+
+];
+
+
+/* =========================================================
+   GOAL
+========================================================= */
+
+const goal={
+
+    x:2200,
+    y:330,
+
+    unlocked:false
+
 };
 
-const goal = {
-    x: 875,
-    y: 95,
-    w: 45,
-    h: 45
-};
 
-/* =====================================================
-   AUDIO
-===================================================== */
+/* =========================================================
+   SOUND
+========================================================= */
 
-let audioCtx;
+let audio;
 
-function beep(freq = 440, duration = .08) {
+function beep(freq=440,time=.08){
 
-    try {
+    try{
 
-        if (!audioCtx)
-            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        if(!audio){
 
-        const osc = audioCtx.createOscillator();
-        const gain = audioCtx.createGain();
+            audio =
+                new AudioContext();
 
-        osc.frequency.value = freq;
-        osc.type = "square";
+        }
 
-        gain.gain.setValueAtTime(.04, audioCtx.currentTime);
+        const oscillator =
+            audio.createOscillator();
+
+        const gain =
+            audio.createGain();
+
+        oscillator.type="square";
+
+        oscillator.frequency.value=
+            freq;
+
+        gain.gain.setValueAtTime(
+            .035,
+            audio.currentTime
+        );
 
         gain.gain.exponentialRampToValueAtTime(
             .001,
-            audioCtx.currentTime + duration
+            audio.currentTime+time
         );
 
-        osc.connect(gain);
-        gain.connect(audioCtx.destination);
+        oscillator.connect(gain);
 
-        osc.start();
-        osc.stop(audioCtx.currentTime + duration);
+        gain.connect(audio.destination);
 
-    } catch(e) {}
+        oscillator.start();
+
+        oscillator.stop(
+            audio.currentTime+time
+        );
+
+    }catch(e){}
 
 }
 
-/* =====================================================
+
+/* =========================================================
    START
-===================================================== */
+========================================================= */
 
-function startGame() {
+function startGame(){
 
-    document.getElementById("start-screen").style.display = "none";
+    document.getElementById("start")
+        .style.display="none";
 
-    running = true;
+    started=true;
 
-    beep(660);
-    setTimeout(() => beep(880), 100);
+    beep(523,.1);
+
+    setTimeout(()=>{
+        beep(659,.1);
+    },100);
 
     requestAnimationFrame(loop);
+
 }
 
-/* =====================================================
+
+/* =========================================================
    INPUT
-===================================================== */
+========================================================= */
 
-window.addEventListener("keydown", e => {
+window.addEventListener(
+    "keydown",
+    e=>{
 
-    keys[e.key.toLowerCase()] = true;
+        keys[
+            e.key.toLowerCase()
+        ]=true;
 
-    if (e.code === "Space") {
+        if(e.code==="Space"){
 
-        if (document.getElementById("dialog").style.display === "block") {
-
-            document.getElementById("dialog").style.display = "none";
+            closeDialog();
 
         }
 
     }
+);
 
-});
+window.addEventListener(
+    "keyup",
+    e=>{
 
-window.addEventListener("keyup", e => {
-    keys[e.key.toLowerCase()] = false;
-});
+        keys[
+            e.key.toLowerCase()
+        ]=false;
 
-/* Mobile buttons */
+    }
+);
 
-function bindControl(id, key) {
 
-    const button = document.getElementById(id);
+/* =========================================================
+   MOBILE
+========================================================= */
 
-    button.addEventListener("pointerdown", e => {
+function mobileButton(id,key){
 
-        e.preventDefault();
+    const b =
+        document.getElementById(id);
 
-        keys[key] = true;
+    b.addEventListener(
+        "pointerdown",
+        e=>{
 
-    });
+            e.preventDefault();
 
-    button.addEventListener("pointerup", e => {
+            keys[key]=true;
 
-        e.preventDefault();
+        }
+    );
 
-        keys[key] = false;
+    b.addEventListener(
+        "pointerup",
+        ()=>{
+            keys[key]=false;
+        }
+    );
 
-    });
+    b.addEventListener(
+        "pointercancel",
+        ()=>{
+            keys[key]=false;
+        }
+    );
 
-    button.addEventListener("pointercancel", () => {
-        keys[key] = false;
-    });
-
-    button.addEventListener("pointerleave", () => {
-        keys[key] = false;
-    });
 }
 
-bindControl("up","arrowup");
-bindControl("down","arrowdown");
-bindControl("left","arrowleft");
-bindControl("right","arrowright");
+mobileButton("up","arrowup");
+mobileButton("down","arrowdown");
+mobileButton("left","arrowleft");
+mobileButton("right","arrowright");
 
-/* =====================================================
+
+/* =========================================================
    UPDATE
-===================================================== */
+========================================================= */
 
-function update() {
+function update(){
 
-    if (!running || finished)
+    if(!started || finished)
         return;
 
-    let dx = 0;
-    let dy = 0;
+    if(dialogOpen)
+        return;
 
-    if (keys["w"] || keys["arrowup"])
-        dy -= 1;
+    let dx=0;
+    let dy=0;
 
-    if (keys["s"] || keys["arrowdown"])
-        dy += 1;
+    if(keys["w"] || keys["arrowup"])
+        dy--;
 
-    if (keys["a"] || keys["arrowleft"])
-        dx -= 1;
+    if(keys["s"] || keys["arrowdown"])
+        dy++;
 
-    if (keys["d"] || keys["arrowright"])
-        dx += 1;
+    if(keys["a"] || keys["arrowleft"])
+        dx--;
 
-    if (dx !== 0 || dy !== 0) {
+    if(keys["d"] || keys["arrowright"])
+        dx++;
 
-        const length = Math.sqrt(dx*dx + dy*dy);
+    if(dx || dy){
 
-        dx /= length;
-        dy /= length;
+        const len =
+            Math.sqrt(
+                dx*dx+dy*dy
+            );
 
-        player.x += dx * player.speed;
-        player.y += dy * player.speed;
+        dx/=len;
+        dy/=len;
 
-        player.frame += .2;
+        player.x +=
+            dx*player.speed;
+
+        player.y +=
+            dy*player.speed;
+
+        player.walk += .25;
+
+        if(dx>0)
+            player.direction="right";
+
+        if(dx<0)
+            player.direction="left";
 
     }
 
-    /* Boundaries */
 
-    player.x = Math.max(30, Math.min(W - 55, player.x));
-    player.y = Math.max(90, Math.min(H - 45, player.y));
+    /* WORLD LIMITS */
 
-    /* Collect stars */
-
-    stars.forEach(star => {
-
-        if (star.taken)
-            return;
-
-        const dist = Math.hypot(
-            player.x - star.x,
-            player.y - star.y
+    player.x =
+        Math.max(
+            40,
+            Math.min(
+                WORLD_W-40,
+                player.x
+            )
         );
 
-        if (dist < 30) {
+    player.y =
+        Math.max(
+            80,
+            Math.min(
+                WORLD_H-60,
+                player.y
+            )
+        );
 
-            star.taken = true;
+
+    /* CAMERA */
+
+    camera.x =
+        player.x - VIEW_W/2;
+
+    camera.y =
+        player.y - VIEW_H/2;
+
+    camera.x =
+        Math.max(
+            0,
+            Math.min(
+                WORLD_W-VIEW_W,
+                camera.x
+            )
+        );
+
+    camera.y =
+        Math.max(
+            0,
+            Math.min(
+                WORLD_H-VIEW_H,
+                camera.y
+            )
+        );
+
+
+    collectStars();
+
+    collectLetters();
+
+    checkNPC();
+
+    checkGoal();
+
+}
+
+
+/* =========================================================
+   STAR COLLECTION
+========================================================= */
+
+function collectStars(){
+
+    stars.forEach(star=>{
+
+        if(star.taken)
+            return;
+
+        const distance =
+            Math.hypot(
+                player.x-star.x,
+                player.y-star.y
+            );
+
+        if(distance<38){
+
+            star.taken=true;
+
             starsCollected++;
 
-            document.getElementById("stars").textContent =
-                "★ " + starsCollected;
+            document.getElementById("stars")
+                .textContent=
+                `★ ${starsCollected} / 8`;
 
-            beep(880);
-            setTimeout(() => beep(1200), 70);
+            beep(880,.07);
+
+            setTimeout(
+                ()=>beep(1200,.07),
+                70
+            );
+
+            showNotification(
+                "★ ОД ОЛДЛОО!",
+                "Жижигхэн гэрэл ч гэсэн\nхаранхуйд хэрэгтэй."
+            );
+
+            updateQuest();
 
         }
 
     });
 
-    /* NPC */
-
-    const npcDistance = Math.hypot(
-        player.x - npc.x,
-        player.y - npc.y
-    );
-
-    if (npcDistance < 45) {
-
-        showDialog();
-
-    }
-
-    /* Goal */
-
-    const goalDistance = Math.hypot(
-        player.x - goal.x,
-        player.y - goal.y
-    );
-
-    if (goalDistance < 55) {
-
-        finishGame();
-
-    }
-
 }
 
-/* =====================================================
-   DIALOG
-===================================================== */
 
-let dialogShown = false;
+/* =========================================================
+   LETTERS
+========================================================= */
 
-function showDialog() {
+function collectLetters(){
 
-    if (dialogShown)
-        return;
+    letterObjects.forEach((letter,index)=>{
 
-    dialogShown = true;
+        if(letter.taken)
+            return;
 
-    document.getElementById("dialog").style.display = "block";
+        const distance =
+            Math.hypot(
+                player.x-letter.x,
+                player.y-letter.y
+            );
 
-    document.getElementById("dialog-name").textContent =
-        "???";
+        if(distance<40){
 
-    document.getElementById("dialog-text").innerHTML =
-        NPC_MESSAGES.join("<br><br>");
+            letter.taken=true;
 
-    beep(520);
+            lettersCollected++;
 
-    setTimeout(() => {
+            document.getElementById("letters")
+                .textContent=
+                `✉ ${lettersCollected} / 3`;
 
-        document.getElementById("dialog").style.display = "none";
+            beep(600,.08);
 
-        dialogShown = false;
+            showNotification(
+                "✉ НУУЦ ЗАХИДАЛ",
+                letters[index]
+            );
 
-    }, 7000);
+            updateQuest();
 
-}
-
-/* =====================================================
-   FINAL
-===================================================== */
-
-function finishGame() {
-
-    if (finished)
-        return;
-
-    finished = true;
-
-    beep(523);
-
-    setTimeout(() => beep(659), 120);
-
-    setTimeout(() => beep(784), 240);
-
-    setTimeout(() => {
-
-        document.getElementById("final-screen")
-            .style.display = "flex";
-
-    }, 500);
-
-}
-
-/* =====================================================
-   DRAW
-===================================================== */
-
-function draw() {
-
-    ctx.clearRect(0,0,W,H);
-
-    drawBackground();
-    drawRoad();
-    drawStars();
-    drawNPC();
-    drawGoal();
-    drawPlayer();
-
-}
-
-/* =====================================================
-   BACKGROUND
-===================================================== */
-
-function drawBackground() {
-
-    /* Sky */
-
-    ctx.fillStyle = "#171126";
-    ctx.fillRect(0,0,W,H);
-
-    /* Moon */
-
-    ctx.fillStyle = "#ffeab0";
-    ctx.fillRect(760,75,34,34);
-
-    ctx.fillStyle = "#171126";
-    ctx.fillRect(772,68,34,34);
-
-    /* Stars in sky */
-
-    const skyStars = [
-        [90,120],[160,170],[270,110],[380,80],
-        [540,115],[630,75],[720,155],
-        [840,130],[930,75]
-    ];
-
-    ctx.fillStyle = "#fff2c9";
-
-    skyStars.forEach(([x,y]) => {
-
-        ctx.fillRect(x,y,3,3);
+        }
 
     });
 
-    /* Mountains */
+}
 
-    ctx.fillStyle = "#282044";
 
-    ctx.beginPath();
+/* =========================================================
+   QUEST
+========================================================= */
 
-    ctx.moveTo(0,400);
-    ctx.lineTo(170,210);
-    ctx.lineTo(300,390);
-    ctx.lineTo(470,190);
-    ctx.lineTo(650,400);
-    ctx.lineTo(800,230);
-    ctx.lineTo(1000,390);
-    ctx.lineTo(1000,650);
-    ctx.lineTo(0,650);
+function updateQuest(){
 
-    ctx.fill();
+    const quest =
+        document.getElementById("quest");
 
-    /* Ground */
+    if(starsCollected<8){
 
-    ctx.fillStyle = "#233b31";
-    ctx.fillRect(0,380,W,H-380);
+        quest.innerHTML=
+            `📜 Даалгавар:<br>
+             Оддыг цуглуул.
+             (${starsCollected}/8)<br>
+             Нууц захидал:
+             (${lettersCollected}/3)`;
 
-    /* Grass pixels */
+    }else{
 
-    ctx.fillStyle = "#31513d";
+        quest.innerHTML=
+            `🔓 Шинэ даалгавар:<br>
+             Сүүлчийн хаалга руу оч.`;
 
-    for(let x=0; x<W; x+=35) {
-
-        const y = 400 + ((x*17)%90);
-
-        ctx.fillRect(x,y,4,10);
-        ctx.fillRect(x+8,y+5,3,7);
+        goal.unlocked=true;
 
     }
 
 }
 
-/* =====================================================
-   ROAD
-===================================================== */
 
-function drawRoad() {
+/* =========================================================
+   NPC
+========================================================= */
 
-    ctx.fillStyle = "#604d48";
+let lastNPC=null;
+
+function checkNPC(){
+
+    npcs.forEach((npc,index)=>{
+
+        const distance =
+            Math.hypot(
+                player.x-npc.x,
+                player.y-npc.y
+            );
+
+        if(distance<60 && lastNPC!==index){
+
+            lastNPC=index;
+
+            showDialog(
+                npc.name,
+                npc.text
+            );
+
+        }
+
+    });
+
+}
+
+
+/* =========================================================
+   DIALOG
+========================================================= */
+
+function showDialog(name,texts){
+
+    dialogOpen=true;
+
+    document.getElementById("dialog")
+        .style.display="block";
+
+    document.getElementById("dialogName")
+        .textContent=name;
+
+    document.getElementById("dialogText")
+        .innerHTML=
+        texts.join("<br><br>");
+
+    beep(400,.08);
+
+}
+
+
+function closeDialog(){
+
+    if(!dialogOpen)
+        return;
+
+    dialogOpen=false;
+
+    document.getElementById("dialog")
+        .style.display="none";
+
+}
+
+
+/* =========================================================
+   GOAL
+========================================================= */
+
+function checkGoal(){
+
+    const distance =
+        Math.hypot(
+            player.x-goal.x,
+            player.y-goal.y
+        );
+
+    if(distance<65){
+
+        if(goal.unlocked){
+
+            finishGame();
+
+        }else{
+
+            showNotification(
+                "🔒 ХААЛГА ТҮГЖЭЭТЭЙ",
+                "Бүх 8 одыг цуглуул."
+            );
+
+        }
+
+    }
+
+}
+
+
+/* =========================================================
+   NOTIFICATION
+========================================================= */
+
+let notificationTimer;
+
+function showNotification(title,text){
+
+    const box =
+        document.getElementById(
+            "notification"
+        );
+
+    box.innerHTML=
+        `<div style="
+            color:#ff86bd;
+            margin-bottom:12px;
+        ">${title}</div>
+
+        <div style="
+            white-space:pre-line;
+        ">${text}</div>`;
+
+    box.style.display="block";
+
+    clearTimeout(notificationTimer);
+
+    notificationTimer=
+        setTimeout(()=>{
+
+            box.style.display="none";
+
+        },3000);
+
+}
+
+
+/* =========================================================
+   FINISH
+========================================================= */
+
+function finishGame(){
+
+    if(finished)
+        return;
+
+    finished=true;
+
+    beep(523,.12);
+
+    setTimeout(
+        ()=>beep(659,.12),
+        120
+    );
+
+    setTimeout(
+        ()=>beep(784,.18),
+        240
+    );
+
+    setTimeout(()=>{
+
+        document.getElementById("final")
+            .style.display="flex";
+
+    },700);
+
+}
+
+
+/* =========================================================
+   DRAW
+========================================================= */
+
+function draw(){
+
+    ctx.clearRect(
+        0,
+        0,
+        canvas.width,
+        canvas.height
+    );
+
+    ctx.save();
+
+    /*
+       Scale canvas coordinate system
+       to CSS pixel dimensions.
+    */
+
+    const sx =
+        canvas.width / VIEW_W;
+
+    const sy =
+        canvas.height / VIEW_H;
+
+    ctx.scale(sx,sy);
+
+    ctx.translate(
+        -camera.x,
+        -camera.y
+    );
+
+    drawWorld();
+
+    drawStars();
+
+    drawLetters();
+
+    drawNPCs();
+
+    drawGoal();
+
+    drawPlayer();
+
+    ctx.restore();
+
+}
+
+
+/* =========================================================
+   WORLD
+========================================================= */
+
+function drawWorld(){
+
+    /* SKY */
+
+    ctx.fillStyle="#171126";
+
+    ctx.fillRect(
+        0,
+        0,
+        WORLD_W,
+        WORLD_H
+    );
+
+
+    /* MOON */
+
+    ctx.fillStyle="#ffeab2";
+
+    ctx.fillRect(
+        1900,
+        110,
+        55,
+        55
+    );
+
+    ctx.fillStyle="#171126";
+
+    ctx.fillRect(
+        1920,
+        95,
+        55,
+        55
+    );
+
+
+    /* SKY STARS */
+
+    const skyStars=[
+
+        [100,150],
+        [240,90],
+        [390,180],
+        [530,110],
+        [680,200],
+        [830,100],
+        [980,170],
+        [1140,80],
+        [1280,160],
+        [1440,90],
+        [1590,190],
+        [1760,120],
+        [2070,180],
+        [2250,90]
+
+    ];
+
+    ctx.fillStyle="#fff2c9";
+
+    skyStars.forEach(
+        ([x,y])=>{
+            ctx.fillRect(
+                x,
+                y,
+                3,
+                3
+            );
+        }
+    );
+
+
+    /* MOUNTAINS */
+
+    ctx.fillStyle="#282044";
 
     ctx.beginPath();
 
-    ctx.moveTo(70,570);
-    ctx.lineTo(360,470);
-    ctx.lineTo(570,390);
-    ctx.lineTo(760,280);
-    ctx.lineTo(910,120);
+    ctx.moveTo(0,650);
 
-    ctx.lineTo(1000,160);
-    ctx.lineTo(800,340);
-    ctx.lineTo(600,450);
-    ctx.lineTo(390,530);
-    ctx.lineTo(100,620);
+    for(
+        let x=0;
+        x<=WORLD_W;
+        x+=150
+    ){
 
-    ctx.closePath();
+        const h =
+            150 +
+            ((x*37)%180);
+
+        ctx.lineTo(
+            x,
+            650-h
+        );
+
+    }
+
+    ctx.lineTo(
+        WORLD_W,
+        WORLD_H
+    );
+
+    ctx.lineTo(
+        0,
+        WORLD_H
+    );
 
     ctx.fill();
 
-    /* Road highlights */
 
-    ctx.strokeStyle = "#80665b";
-    ctx.lineWidth = 4;
-    ctx.setLineDash([18,18]);
+    /* GROUND */
+
+    ctx.fillStyle="#203a2f";
+
+    ctx.fillRect(
+        0,
+        650,
+        WORLD_W,
+        WORLD_H
+    );
+
+
+    /* GRASS */
+
+    ctx.fillStyle="#31503c";
+
+    for(
+        let x=0;
+        x<WORLD_W;
+        x+=35
+    ){
+
+        const y=
+            680+
+            ((x*13)%500);
+
+        ctx.fillRect(
+            x,
+            y,
+            4,
+            11
+        );
+
+        ctx.fillRect(
+            x+8,
+            y+5,
+            3,
+            7
+        );
+
+    }
+
+
+    drawRoads();
+
+    drawTrees();
+
+    drawHouse();
+
+    drawLake();
+
+    drawFlowers();
+
+}
+
+
+/* =========================================================
+   ROADS
+========================================================= */
+
+function drawRoads(){
+
+    ctx.strokeStyle="#604c45";
+
+    ctx.lineWidth=85;
+
+    ctx.lineCap="square";
 
     ctx.beginPath();
 
-    ctx.moveTo(110,580);
-    ctx.lineTo(390,500);
-    ctx.lineTo(590,420);
-    ctx.lineTo(770,315);
-    ctx.lineTo(900,170);
+    ctx.moveTo(
+        120,
+        1080
+    );
+
+    ctx.lineTo(
+        500,
+        900
+    );
+
+    ctx.lineTo(
+        850,
+        760
+    );
+
+    ctx.lineTo(
+        1150,
+        700
+    );
+
+    ctx.lineTo(
+        1450,
+        590
+    );
+
+    ctx.lineTo(
+        1750,
+        550
+    );
+
+    ctx.lineTo(
+        2200,
+        330
+    );
+
+    ctx.stroke();
+
+
+    ctx.strokeStyle="#80645a";
+
+    ctx.lineWidth=4;
+
+    ctx.setLineDash(
+        [18,20]
+    );
+
+    ctx.beginPath();
+
+    ctx.moveTo(
+        120,
+        1080
+    );
+
+    ctx.lineTo(
+        500,
+        900
+    );
+
+    ctx.lineTo(
+        850,
+        760
+    );
+
+    ctx.lineTo(
+        1150,
+        700
+    );
+
+    ctx.lineTo(
+        1450,
+        590
+    );
+
+    ctx.lineTo(
+        1750,
+        550
+    );
+
+    ctx.lineTo(
+        2200,
+        330
+    );
 
     ctx.stroke();
 
@@ -960,209 +1757,773 @@ function drawRoad() {
 
 }
 
-/* =====================================================
+
+/* =========================================================
+   TREES
+========================================================= */
+
+function drawTrees(){
+
+    const trees=[
+
+        [120,760],
+        [250,670],
+        [330,1120],
+        [620,650],
+        [760,1180],
+        [940,820],
+        [1100,980],
+        [1270,580],
+        [1430,1040],
+        [1610,700],
+        [1750,970],
+        [1900,780],
+        [2050,560],
+        [2320,500],
+        [2250,850]
+
+    ];
+
+    trees.forEach(
+        ([x,y])=>{
+            drawTree(x,y);
+        }
+    );
+
+}
+
+
+function drawTree(x,y){
+
+    ctx.fillStyle="#493329";
+
+    ctx.fillRect(
+        x-7,
+        y+25,
+        14,
+        48
+    );
+
+    ctx.fillStyle="#214b35";
+
+    ctx.fillRect(
+        x-32,
+        y-5,
+        64,
+        40
+    );
+
+    ctx.fillRect(
+        x-23,
+        y-30,
+        46,
+        35
+    );
+
+    ctx.fillStyle="#2d6442";
+
+    ctx.fillRect(
+        x-15,
+        y-43,
+        30,
+        30
+    );
+
+}
+
+
+/* =========================================================
+   HOUSE
+========================================================= */
+
+function drawHouse(){
+
+    const x=1040;
+    const y=460;
+
+    /* body */
+
+    ctx.fillStyle="#704b55";
+
+    ctx.fillRect(
+        x,
+        y+45,
+        180,
+        130
+    );
+
+    /* roof */
+
+    ctx.fillStyle="#352442";
+
+    ctx.beginPath();
+
+    ctx.moveTo(
+        x-25,
+        y+50
+    );
+
+    ctx.lineTo(
+        x+90,
+        y-40
+    );
+
+    ctx.lineTo(
+        x+205,
+        y+50
+    );
+
+    ctx.closePath();
+
+    ctx.fill();
+
+
+    /* door */
+
+    ctx.fillStyle="#2b1d2c";
+
+    ctx.fillRect(
+        x+72,
+        y+95,
+        38,
+        80
+    );
+
+
+    /* windows */
+
+    ctx.fillStyle="#ffd66a";
+
+    ctx.fillRect(
+        x+20,
+        y+80,
+        35,
+        30
+    );
+
+    ctx.fillRect(
+        x+125,
+        y+80,
+        35,
+        30
+    );
+
+}
+
+
+/* =========================================================
+   LAKE
+========================================================= */
+
+function drawLake(){
+
+    ctx.fillStyle="#244c68";
+
+    ctx.fillRect(
+        1450,
+        760,
+        350,
+        210
+    );
+
+    ctx.fillStyle="#36799a";
+
+    for(
+        let y=790;
+        y<950;
+        y+=28
+    ){
+
+        ctx.fillRect(
+            1480,
+            y,
+            100,
+            3
+        );
+
+        ctx.fillRect(
+            1640,
+            y+10,
+            130,
+            3
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   FLOWERS
+========================================================= */
+
+function drawFlowers(){
+
+    const flowers=[
+
+        [430,760],
+        [520,700],
+        [880,930],
+        [1210,830],
+        [1370,1050],
+        [1820,750],
+        [2010,600]
+
+    ];
+
+    flowers.forEach(
+        ([x,y],i)=>{
+
+            ctx.fillStyle =
+                i%2===0
+                ? "#ff80b5"
+                : "#ffd75a";
+
+            ctx.fillRect(
+                x,
+                y,
+                5,
+                5
+            );
+
+            ctx.fillRect(
+                x-5,
+                y+5,
+                15,
+                5
+            );
+
+        }
+    );
+
+}
+
+
+/* =========================================================
    STARS
-===================================================== */
+========================================================= */
 
-function drawStars() {
+function drawStars(){
 
-    stars.forEach(star => {
+    stars.forEach(star=>{
 
-        if (star.taken)
+        if(star.taken)
             return;
 
-        const pulse =
-            Math.sin(Date.now()/200 + star.x) * 3;
+        const pulse=
+            Math.sin(
+                Date.now()/220+
+                star.x
+            )*4;
 
         drawPixelStar(
             star.x,
-            star.y + pulse,
-            "#ffd75a"
+            star.y+pulse
         );
 
     });
 
 }
 
-function drawPixelStar(x,y,color) {
 
-    ctx.fillStyle = color;
+function drawPixelStar(x,y){
 
-    ctx.fillRect(x-3,y-12,6,24);
-    ctx.fillRect(x-12,y-3,24,6);
-
-    ctx.fillRect(x-7,y-7,14,14);
-
-    ctx.fillStyle = "#fff4a5";
-
-    ctx.fillRect(x-3,y-6,6,6);
-
-}
-
-/* =====================================================
-   NPC
-===================================================== */
-
-function drawNPC() {
-
-    /* Shadow */
-
-    ctx.fillStyle = "rgba(0,0,0,.35)";
-    ctx.fillRect(npc.x-15,npc.y+27,32,7);
-
-    /* Body */
-
-    ctx.fillStyle = "#ff4f9a";
-    ctx.fillRect(npc.x-13,npc.y+5,26,24);
-
-    /* Head */
-
-    ctx.fillStyle = "#f5c9a5";
-    ctx.fillRect(npc.x-12,npc.y-12,24,20);
-
-    /* Hair */
-
-    ctx.fillStyle = "#34203d";
-    ctx.fillRect(npc.x-14,npc.y-15,28,9);
-    ctx.fillRect(npc.x-14,npc.y-9,5,10);
-
-    /* Eyes */
-
-    ctx.fillStyle = "#201522";
-    ctx.fillRect(npc.x-7,npc.y-4,3,3);
-    ctx.fillRect(npc.x+5,npc.y-4,3,3);
-
-    /* Legs */
-
-    ctx.fillStyle = "#292342";
-    ctx.fillRect(npc.x-10,npc.y+29,8,12);
-    ctx.fillRect(npc.x+3,npc.y+29,8,12);
-
-}
-
-/* =====================================================
-   GOAL
-===================================================== */
-
-function drawGoal() {
-
-    const pulse =
-        Math.sin(Date.now()/250) * 5;
-
-    ctx.fillStyle = "rgba(255,79,154,.2)";
+    ctx.fillStyle="#ffd75a";
 
     ctx.fillRect(
-        goal.x-15-pulse/2,
-        goal.y-15-pulse/2,
-        goal.w+30+pulse,
-        goal.h+30+pulse
+        x-4,
+        y-15,
+        8,
+        30
     );
 
-    /* Portal */
+    ctx.fillRect(
+        x-15,
+        y-4,
+        30,
+        8
+    );
 
-    ctx.strokeStyle = "#ff86bd";
-    ctx.lineWidth = 5;
+    ctx.fillRect(
+        x-8,
+        y-8,
+        16,
+        16
+    );
+
+    ctx.fillStyle="#fff5a6";
+
+    ctx.fillRect(
+        x-4,
+        y-7,
+        8,
+        8
+    );
+
+}
+
+
+/* =========================================================
+   LETTERS
+========================================================= */
+
+function drawLetters(){
+
+    letterObjects.forEach(letter=>{
+
+        if(letter.taken)
+            return;
+
+        ctx.fillStyle="#fff4d6";
+
+        ctx.fillRect(
+            letter.x-10,
+            letter.y-8,
+            20,
+            16
+        );
+
+        ctx.fillStyle="#d86d9b";
+
+        ctx.fillRect(
+            letter.x-10,
+            letter.y-8,
+            20,
+            3
+        );
+
+        ctx.fillRect(
+            letter.x-7,
+            letter.y-2,
+            14,
+            2
+        );
+
+    });
+
+}
+
+
+/* =========================================================
+   NPCS
+========================================================= */
+
+function drawNPCs(){
+
+    npcs.forEach(
+        (npc,index)=>{
+
+            drawCharacter(
+                npc.x,
+                npc.y,
+                index
+            );
+
+        }
+    );
+
+}
+
+
+function drawCharacter(x,y,index){
+
+    const colors=[
+        "#ff86bd",
+        "#8db8ff",
+        "#a87de0",
+        "#6fd6a0"
+    ];
+
+    /* shadow */
+
+    ctx.fillStyle=
+        "rgba(0,0,0,.3)";
+
+    ctx.fillRect(
+        x-16,
+        y+30,
+        32,
+        7
+    );
+
+
+    /* body */
+
+    ctx.fillStyle=
+        colors[index];
+
+    ctx.fillRect(
+        x-13,
+        y+4,
+        26,
+        26
+    );
+
+
+    /* head */
+
+    ctx.fillStyle="#efc19f";
+
+    ctx.fillRect(
+        x-12,
+        y-18,
+        24,
+        23
+    );
+
+
+    /* hair */
+
+    ctx.fillStyle="#35233a";
+
+    ctx.fillRect(
+        x-14,
+        y-21,
+        28,
+        9
+    );
+
+    ctx.fillRect(
+        x-14,
+        y-14,
+        6,
+        17
+    );
+
+
+    /* eyes */
+
+    ctx.fillStyle="#17121d";
+
+    ctx.fillRect(
+        x-7,
+        y-6,
+        3,
+        3
+    );
+
+    ctx.fillRect(
+        x+5,
+        y-6,
+        3,
+        3
+    );
+
+
+    /* legs */
+
+    ctx.fillStyle="#29243c";
+
+    ctx.fillRect(
+        x-10,
+        y+30,
+        8,
+        13
+    );
+
+    ctx.fillRect(
+        x+3,
+        y+30,
+        8,
+        13
+    );
+
+}
+
+
+/* =========================================================
+   GOAL
+========================================================= */
+
+function drawGoal(){
+
+    const pulse=
+        Math.sin(
+            Date.now()/250
+        )*5;
+
+    ctx.fillStyle=
+        goal.unlocked
+        ? "rgba(255,92,157,.18)"
+        : "rgba(100,100,100,.15)";
+
+    ctx.fillRect(
+        goal.x-20-pulse/2,
+        goal.y-20-pulse/2,
+        90+pulse,
+        90+pulse
+    );
+
+
+    ctx.strokeStyle=
+        goal.unlocked
+        ? "#ff86bd"
+        : "#666";
+
+    ctx.lineWidth=5;
 
     ctx.strokeRect(
         goal.x,
         goal.y,
-        goal.w,
-        goal.h
+        50,
+        65
     );
 
-    ctx.fillStyle = "#ff4f9a";
+
+    ctx.fillStyle=
+        goal.unlocked
+        ? "#ff5c9d"
+        : "#333";
 
     ctx.fillRect(
         goal.x+10,
         goal.y+10,
-        goal.w-20,
-        goal.h-20
+        30,
+        45
     );
 
-    ctx.fillStyle = "white";
-    ctx.font = "10px 'Press Start 2P'";
-    ctx.fillText("♥", goal.x+15, goal.y+31);
+
+    ctx.fillStyle="white";
+
+    ctx.font=
+        "10px 'Press Start 2P'";
+
+    ctx.fillText(
+        goal.unlocked
+        ? "♥"
+        : "×",
+        goal.x+18,
+        goal.y+38
+    );
 
 }
 
-/* =====================================================
-   PLAYER
-===================================================== */
 
-function drawPlayer() {
+/* =========================================================
+   FEMALE PLAYER
+========================================================= */
 
-    const bounce =
-        Math.sin(player.frame) * 2;
+function drawPlayer(){
 
-    const x = player.x;
-    const y = player.y + bounce;
+    const x=player.x;
 
-    /* Shadow */
+    const y=
+        player.y+
+        Math.sin(player.walk)*2;
 
-    ctx.fillStyle = "rgba(0,0,0,.4)";
-    ctx.fillRect(x-14,y+25,28,7);
 
-    /* Body */
+    /* shadow */
 
-    ctx.fillStyle = "#63c174";
-    ctx.fillRect(x-12,y+4,24,22);
+    ctx.fillStyle=
+        "rgba(0,0,0,.45)";
 
-    /* Backpack */
+    ctx.fillRect(
+        x-17,
+        y+35,
+        34,
+        8
+    );
 
-    ctx.fillStyle = "#a86b42";
-    ctx.fillRect(x-16,y+7,5,18);
 
-    /* Head */
+    /* hair BACK */
 
-    ctx.fillStyle = "#f3c7a4";
-    ctx.fillRect(x-11,y-12,22,19);
+    ctx.fillStyle=
+        player.hair;
 
-    /* Hair */
+    ctx.fillRect(
+        x-16,
+        y-17,
+        32,
+        38
+    );
 
-    ctx.fillStyle = "#2a2034";
-    ctx.fillRect(x-13,y-15,26,8);
+    /*
+       Long hair
+    */
 
-    /* Eyes */
+    ctx.fillRect(
+        x-19,
+        y-8,
+        8,
+        34
+    );
 
-    ctx.fillStyle = "#15111c";
-    ctx.fillRect(x-7,y-3,3,3);
-    ctx.fillRect(x+5,y-3,3,3);
+    ctx.fillRect(
+        x+11,
+        y-8,
+        8,
+        34
+    );
 
-    /* Legs */
 
-    ctx.fillStyle = "#30304b";
+    /* body / dress */
 
-    if(Math.floor(player.frame)%2 === 0) {
+    ctx.fillStyle=
+        player.dress;
 
-        ctx.fillRect(x-9,y+26,7,13);
-        ctx.fillRect(x+4,y+29,7,10);
+    ctx.fillRect(
+        x-14,
+        y+7,
+        28,
+        25
+    );
 
-    } else {
+    /* skirt */
 
-        ctx.fillRect(x-9,y+29,7,10);
-        ctx.fillRect(x+4,y+26,7,13);
+    ctx.fillRect(
+        x-19,
+        y+22,
+        38,
+        12
+    );
+
+
+    /* head */
+
+    ctx.fillStyle=
+        player.skin;
+
+    ctx.fillRect(
+        x-11,
+        y-17,
+        22,
+        24
+    );
+
+
+    /* hair top */
+
+    ctx.fillStyle=
+        player.hair;
+
+    ctx.fillRect(
+        x-14,
+        y-21,
+        28,
+        10
+    );
+
+    /* side fringe */
+
+    ctx.fillRect(
+        x-13,
+        y-15,
+        7,
+        12
+    );
+
+
+    /* bow */
+
+    ctx.fillStyle=
+        "#ff9bc7";
+
+    ctx.fillRect(
+        x+9,
+        y-19,
+        9,
+        7
+    );
+
+    ctx.fillRect(
+        x+14,
+        y-14,
+        6,
+        6
+    );
+
+
+    /* eyes */
+
+    ctx.fillStyle="#18131d";
+
+    ctx.fillRect(
+        x-7,
+        y-5,
+        3,
+        4
+    );
+
+    ctx.fillRect(
+        x+5,
+        y-5,
+        3,
+        4
+    );
+
+
+    /* tiny smile */
+
+    ctx.fillRect(
+        x-2,
+        y+1,
+        5,
+        2
+    );
+
+
+    /* legs */
+
+    ctx.fillStyle="#40304a";
+
+    if(
+        Math.floor(player.walk)%2===0
+    ){
+
+        ctx.fillRect(
+            x-10,
+            y+34,
+            8,
+            12
+        );
+
+        ctx.fillRect(
+            x+4,
+            y+37,
+            8,
+            9
+        );
+
+    }else{
+
+        ctx.fillRect(
+            x-10,
+            y+37,
+            8,
+            9
+        );
+
+        ctx.fillRect(
+            x+4,
+            y+34,
+            8,
+            12
+        );
 
     }
 
 }
 
-/* =====================================================
-   LOOP
-===================================================== */
 
-function loop() {
+/* =========================================================
+   LOOP
+========================================================= */
+
+function loop(){
 
     update();
+
     draw();
 
-    if (running)
+    if(started)
         requestAnimationFrame(loop);
 
 }
 
-resize();
-
 </script>
+
+</div>
 
 </body>
 </html>
+```
