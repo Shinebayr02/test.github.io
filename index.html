@@ -1,11 +1,10 @@
-```html
 <!DOCTYPE html>
 <html lang="mn">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport"
       content="width=device-width, initial-scale=1.0,
-               maximum-scale=1.0, user-scalable=no">
+               maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 
 <title>Чам руу хүрэх зам 💗</title>
 
@@ -32,11 +31,15 @@ html,body{
     width:100%;
     height:100%;
     overflow:hidden;
+    overscroll-behavior:none;
     background:#08060d;
     font-family:"Press Start 2P",monospace;
 }
 
 body{
+    /* dvh = real visible height on mobile browsers (100vh is too tall there) */
+    height:100vh;
+    height:100dvh;
     display:flex;
     align-items:center;
     justify-content:center;
@@ -46,11 +49,18 @@ body{
     position:relative;
     width:min(1200px,100vw);
     height:min(760px,100vh);
+    height:min(760px,100dvh);
     overflow:hidden;
     background:#171126;
+
+    touch-action:none;
+    -webkit-user-select:none;
+    user-select:none;
+    -webkit-touch-callout:none;
 }
 
 canvas{
+    display:block;
     width:100%;
     height:100%;
     image-rendering:pixelated;
@@ -84,9 +94,9 @@ canvas{
 #hud{
     position:absolute;
     z-index:20;
-    top:12px;
-    left:12px;
-    right:12px;
+    top:calc(12px + env(safe-area-inset-top,0px));
+    left:calc(12px + env(safe-area-inset-left,0px));
+    right:calc(12px + env(safe-area-inset-right,0px));
 
     display:flex;
     justify-content:space-between;
@@ -106,22 +116,10 @@ canvas{
     line-height:1.8;
 }
 
-#location{
-    color:var(--pink2);
-}
-
-#hearts{
-    color:var(--pink2);
-    letter-spacing:3px;
-}
-
-#stars{
-    color:var(--yellow);
-}
-
-#letters{
-    color:#9bdcff;
-}
+#location{ color:var(--pink2); }
+#hearts{ color:var(--pink2); letter-spacing:3px; }
+#stars{ color:var(--yellow); }
+#letters{ color:#9bdcff; }
 
 /* ==============================
    QUEST
@@ -130,8 +128,8 @@ canvas{
 #quest{
     position:absolute;
     z-index:20;
-    top:70px;
-    left:12px;
+    top:calc(70px + env(safe-area-inset-top,0px));
+    left:calc(12px + env(safe-area-inset-left,0px));
 
     max-width:350px;
 
@@ -144,6 +142,8 @@ canvas{
 
     font-size:7px;
     line-height:2;
+
+    pointer-events:none;
 }
 
 /* ==============================
@@ -157,7 +157,10 @@ canvas{
 
     display:flex;
     justify-content:center;
-    align-items:center;
+
+    /* scrollable if the screen is short (phone in landscape) */
+    overflow-y:auto;
+    touch-action:pan-y;
 
     padding:20px;
 
@@ -172,6 +175,7 @@ canvas{
 
 .panel{
     width:min(680px,95vw);
+    margin:auto;
 
     background:#171020;
 
@@ -189,13 +193,11 @@ canvas{
 .logo{
     color:var(--pink2);
 
-    font-size:
-        clamp(17px,4vw,32px);
+    font-size:clamp(17px,4vw,32px);
 
     line-height:1.7;
 
-    text-shadow:
-        4px 4px 0 #55244d;
+    text-shadow:4px 4px 0 #55244d;
 }
 
 .subtitle{
@@ -207,6 +209,13 @@ canvas{
 
     font-size:9px;
     line-height:2.4;
+}
+
+.hint{
+    margin-top:22px;
+    color:#8d84a3;
+    font-size:7px;
+    line-height:2;
 }
 
 .button{
@@ -244,6 +253,7 @@ canvas{
     z-index:50;
 
     display:none;
+    cursor:pointer;
 }
 
 .dialogBox{
@@ -258,11 +268,28 @@ canvas{
     min-height:120px;
 }
 
+.dialogBox.letter{
+    border-color:var(--pink2);
+    box-shadow:7px 7px 0 #000, 0 0 0 4px var(--pink);
+}
+
+.dialogHead{
+    display:flex;
+    justify-content:space-between;
+    gap:10px;
+
+    margin-bottom:15px;
+}
+
 .dialogName{
     color:var(--pink2);
     font-size:9px;
+}
 
-    margin-bottom:15px;
+#dialogPage{
+    color:#8d84a3;
+    font-size:8px;
+    white-space:nowrap;
 }
 
 #dialogText{
@@ -270,14 +297,23 @@ canvas{
 
     font-size:9px;
     line-height:2.2;
+
+    white-space:pre-line;
 }
 
 .next{
     margin-top:13px;
 
-    color:#777;
+    color:var(--yellow);
 
-    font-size:7px;
+    font-size:8px;
+    text-align:right;
+
+    animation:blink 1s steps(2,jump-none) infinite;
+}
+
+@keyframes blink{
+    50%{ opacity:.25; }
 }
 
 /* ==============================
@@ -287,14 +323,17 @@ canvas{
 #notification{
     position:absolute;
 
-    top:50%;
+    top:30%;
     left:50%;
 
-    transform:translate(-50%,-50%);
+    transform:translateX(-50%);
 
     z-index:60;
 
     display:none;
+
+    width:max-content;
+    max-width:min(440px,90%);
 
     background:#171020;
 
@@ -310,6 +349,17 @@ canvas{
 
     font-size:9px;
     line-height:2;
+
+    pointer-events:none;
+}
+
+.notifTitle{
+    color:#ff86bd;
+    margin-bottom:12px;
+}
+
+.notifText{
+    white-space:pre-line;
 }
 
 /* ==============================
@@ -323,8 +373,7 @@ canvas{
 .finalTitle{
     color:var(--yellow);
 
-    font-size:
-        clamp(16px,4vw,28px);
+    font-size:clamp(16px,4vw,28px);
 
     line-height:1.8;
 }
@@ -338,13 +387,8 @@ canvas{
 }
 
 @keyframes beat{
-    0%,100%{
-        transform:scale(1);
-    }
-
-    50%{
-        transform:scale(1.18);
-    }
+    0%,100%{ transform:scale(1); }
+    50%{ transform:scale(1.18); }
 }
 
 .finalText{
@@ -355,91 +399,113 @@ canvas{
 }
 
 /* ==============================
-   MOBILE
+   TOUCH CONTROLS
+   (8-way pad: drag your thumb anywhere
+    on it, corners = diagonals)
 ================================*/
 
 #mobileControls{
     position:absolute;
 
-    bottom:15px;
-    left:15px;
+    left:calc(14px + env(safe-area-inset-left,0px));
+    bottom:calc(14px + env(safe-area-inset-bottom,0px));
 
-    width:150px;
-    height:150px;
+    width:156px;
+    height:156px;
 
     z-index:40;
 
     display:none;
+
+    touch-action:none;
+    transition:opacity .2s;
+}
+
+.is-touch #mobileControls{
+    display:block;
+}
+
+/* movement is frozen while a dialog is open, so dim the pad */
+#game.dialog-open #mobileControls{
+    opacity:.3;
+}
+
+#mobileControls::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    border-radius:50%;
+    background:rgba(15,10,24,.35);
+    border:3px dashed rgba(255,255,255,.25);
 }
 
 .control{
     position:absolute;
 
-    width:48px;
-    height:48px;
+    width:52px;
+    height:52px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
 
     border:3px solid white;
 
-    background:rgba(15,10,24,.75);
+    background:rgba(15,10,24,.78);
 
     color:white;
 
-    font-family:inherit;
+    font-size:16px;
 
-    font-size:15px;
+    pointer-events:none;
 }
 
-.control:active{
+.control.on{
     background:var(--pink);
 }
 
-#up{
-    left:50px;
-    top:0;
-}
+#up{ left:52px; top:0; }
+#left{ left:0; top:52px; }
+#right{ left:104px; top:52px; }
+#down{ left:52px; top:104px; }
 
-#left{
-    left:0;
-    top:50px;
-}
+/* ==============================
+   TOUCH / SMALL SCREEN LAYOUT
+================================*/
 
-#down{
-    left:50px;
-    top:50px;
-}
-
-#right{
-    left:100px;
-    top:50px;
+/* portrait phones: dialog sits ABOVE the pad so the pad stays visible */
+.is-touch #dialog{
+    left:3%;
+    right:3%;
+    bottom:calc(178px + env(safe-area-inset-bottom,0px));
 }
 
 @media(max-width:700px){
 
-    #mobileControls{
-        display:block;
-    }
-
     .box{
-        font-size:6px;
-        padding:6px;
+        font-size:7px;
+        padding:6px 7px;
     }
 
     #quest{
-        top:62px;
+        top:calc(62px + env(safe-area-inset-top,0px));
         max-width:250px;
-        font-size:6px;
-    }
-
-    #dialog{
-        bottom:12px;
-    }
-
-    #dialogText{
         font-size:7px;
+    }
+
+    #dialogText,
+    .dialogName{
+        font-size:9px;
     }
 
     .dialogBox{
         padding:13px;
+        min-height:100px;
+    }
+
+    #notification{
+        font-size:8px;
+        padding:14px 16px;
     }
 
     .panel{
@@ -447,7 +513,62 @@ canvas{
     }
 
     .subtitle{
+        font-size:8px;
+    }
+
+    .finalText{
+        font-size:8px;
+    }
+}
+
+/* landscape phones: dialog sits to the RIGHT of the pad */
+@media(max-height:520px){
+
+    .is-touch #dialog{
+        left:calc(196px + env(safe-area-inset-left,0px));
+        right:calc(12px + env(safe-area-inset-right,0px));
+        bottom:calc(12px + env(safe-area-inset-bottom,0px));
+    }
+
+    .dialogBox{
+        min-height:90px;
+        padding:11px 13px;
+    }
+
+    .dialogHead{ margin-bottom:9px; }
+
+    #quest{
+        top:calc(58px + env(safe-area-inset-top,0px));
+    }
+
+    #notification{
+        top:22%;
+    }
+
+    .overlay{ padding:10px; }
+
+    .panel{ padding:16px 16px; }
+
+    .logo{ font-size:16px; }
+
+    .subtitle{
+        margin:12px auto;
         font-size:7px;
+        line-height:2;
+    }
+
+    .hint{ margin-top:12px; }
+
+    .heart{
+        font-size:34px;
+        margin:8px;
+    }
+
+    .finalTitle{ font-size:14px; }
+
+    .finalText{
+        font-size:7px;
+        line-height:2;
     }
 }
 </style>
@@ -509,17 +630,11 @@ canvas{
         <div class="subtitle">
 
             🌙 Нэгэн орой нэгэн охин<br>
-            нэгэн хүнийг хайхаар аялалд гарчээ.
+            нэгэн аялалд гарчээ.
             <br><br>
 
             Зам нь урт.<br>
-            Ой нь харанхуй.<br>
-            Харин төгсгөлд нь хэн хүлээж байгаа бол?
-            <br><br>
-
-            <span style="color:#ff86bd">
-                Энэ бол зүгээр нэг тоглоом биш.
-            </span>
+            Ой харанхуй.<br>
 
         </div>
 
@@ -530,13 +645,9 @@ canvas{
 
         </button>
 
-        <div style="
-            margin-top:25px;
-            font-size:6px;
-            color:#777;
-        ">
-            WASD / ARROW KEYS<br>
-            MOBILE → TOUCH CONTROL
+        <div class="hint">
+            WASD / ← ↑ ↓ → · SPACE<br>
+            📱 ЗҮҮН ДООРХ ТОВЧООР ЯВНА · ДЭЛГЭЦИЙГ ТОВШИЖ ҮРГЭЛЖЛҮҮЛНЭ
         </div>
 
     </div>
@@ -544,23 +655,20 @@ canvas{
 </div>
 
 
-<!-- DIALOG -->
+<!-- DIALOG (tap it / press SPACE to continue) -->
 
 <div id="dialog">
 
-    <div class="dialogBox">
+    <div class="dialogBox" id="dialogBox">
 
-        <div class="dialogName"
-             id="dialogName">
-            ???
+        <div class="dialogHead">
+            <div class="dialogName" id="dialogName">???</div>
+            <div id="dialogPage"></div>
         </div>
 
-        <div id="dialogText">
-        </div>
+        <div id="dialogText"></div>
 
-        <div class="next">
-            [ SPACE / TAP ] ҮРГЭЛЖЛҮҮЛЭХ
-        </div>
+        <div class="next" id="dialogNext">▼ TAP / SPACE</div>
 
     </div>
 
@@ -572,14 +680,14 @@ canvas{
 <div id="notification"></div>
 
 
-<!-- MOBILE -->
+<!-- TOUCH PAD -->
 
 <div id="mobileControls">
 
-    <button class="control" id="up">▲</button>
-    <button class="control" id="left">◀</button>
-    <button class="control" id="down">▼</button>
-    <button class="control" id="right">▶</button>
+    <div class="control" id="up">▲</div>
+    <div class="control" id="left">◀</div>
+    <div class="control" id="right">▶</div>
+    <div class="control" id="down">▼</div>
 
 </div>
 
@@ -625,7 +733,7 @@ canvas{
 
             <span style="color:#aaa">
 
-                — нэг developer-ээс 💗
+                —  💗
 
             </span>
 
@@ -651,19 +759,33 @@ canvas{
    CUSTOM SETTINGS
 ========================================================= */
 
-const CRUSH_NAME = "ШИНЭБАЯР";
+const CRUSH_NAME = "Энх Учрал";
 
 /*
-    ЭНЭ ХЭСГИЙГ ӨӨРИЙНХӨӨРӨӨ ӨӨРЧИЛЖ БОЛНО.
+    НУУЦ ЗАХИДЛУУД (pick-up lines)
+    Захидал бүр нь хуудас хуудсаараа гарна.
+    Нэг хуудас = массивын нэг мөр. ӨӨРИЙНХӨӨРӨӨ ӨӨРЧИЛЖ БОЛНО.
 */
 
-const letters = [
+const pickupLines = [
 
-    "Зарим хүмүүс амьдралд зүгээр л орж ирдэг.",
+    [
+        "Чи нүүрстөрөгчийн хий юм уу?",
+        "Миний уур амьсгал өөрчлөгдөөд байна",
+        ""
+    ],
 
-    "Харин зарим хүн орж ирээд\nөдрийг чинь арай гоё болгодог.",
+    [
+        "Миний зүрх 1% цэнэгтэй байсан юм.",
+        "Чамайг хараад 100% болчихлоо.",
+        "(Цэнэглэгч нь чи байсан юм байна. Одоо салгаж болохгүй шүү)"
+    ],
 
-    "Магадгүй чи аль нь болохоо өөрөө мэдэх байх. :)"
+    [
+        "Чи барилгачин уу?",
+        "Би чамтай амьдралаа босгох гэсэн юмаа",
+        ""
+    ]
 
 ];
 
@@ -675,23 +797,21 @@ const npcs = [
         name:"🌸 Цэцэрлэгийн охин",
 
         text:[
-            "Чи эндүүрчихсэн юм биш биз?",
-            "Эндээс цааш явах зам харанхуй.",
-            "Гэхдээ айх хэрэггүй.",
-            "Чи хайж байгаа хүнээ олно."
+            "Яасан хөөрхөн эгч вэ?",
+            "Амжилт"
         ]
     },
 
     {
         x:1120,
         y:310,
-        name:"☕ Кофе зардаг ах",
+        name:"☕ Кофе зардаг хүн",
 
         text:[
             "Оройн мэнд.",
             "Нэг кофе авах уу?",
-            "Үнэгүй шүү.",
-            "Яагаад гэвэл өнөөдөр чи зоригтой аялж байна."
+            "Хөөрхөн охинд үнэгүй ",
+           
         ]
     },
 
@@ -704,7 +824,7 @@ const npcs = [
             "Мяааау.",
             "Мяау мяау.",
             "...",
-            "Чамайг хэн нэгэн хүлээж байгаа."
+            
         ]
     },
 
@@ -715,7 +835,6 @@ const npcs = [
 
         text:[
             "Чи их хол явжээ.",
-            "Тэр хүн ойрхон байгаа.",
             "Гэхдээ эхлээд сүүлчийн одоо ол.",
             "Тэгвэл хаалга нээгдэнэ."
         ]
@@ -723,16 +842,16 @@ const npcs = [
 
 ];
 
+npcs.forEach(n=>{ n.inRange=false; });
+
 
 /* =========================================================
    CANVAS
 ========================================================= */
 
-const canvas =
-    document.getElementById("canvas");
-
-const ctx =
-    canvas.getContext("2d");
+const gameEl  = document.getElementById("game");
+const canvas  = document.getElementById("canvas");
+const ctx     = canvas.getContext("2d");
 
 const WORLD_W = 2400;
 const WORLD_H = 1300;
@@ -742,28 +861,22 @@ let VIEW_H = 760;
 
 function resize(){
 
-    const rect =
-        canvas.getBoundingClientRect();
+    const rect = canvas.getBoundingClientRect();
 
-    canvas.width =
-        rect.width *
-        Math.min(devicePixelRatio || 1,2);
+    if(!rect.width || !rect.height)
+        return;
 
-    canvas.height =
-        rect.height *
-        Math.min(devicePixelRatio || 1,2);
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+    canvas.width  = Math.round(rect.width  * dpr);
+    canvas.height = Math.round(rect.height * dpr);
 
     VIEW_W = rect.width;
     VIEW_H = rect.height;
 
+    updateCamera();
+
 }
-
-window.addEventListener(
-    "resize",
-    resize
-);
-
-resize();
 
 
 /* =========================================================
@@ -778,16 +891,14 @@ const player = {
     width:30,
     height:44,
 
-    speed:4,
+    speed:240,          /* pixels per SECOND (frame-rate independent) */
 
     direction:"right",
 
     walk:0,
 
     hair:"#39253b",
-
     dress:"#ff5c9d",
-
     skin:"#f1c4a3"
 
 };
@@ -797,25 +908,33 @@ const player = {
    CAMERA
 ========================================================= */
 
-const camera = {
-    x:0,
-    y:0
-};
+const camera = { x:0, y:0 };
+
+function updateCamera(){
+
+    camera.x = player.x - VIEW_W/2;
+    camera.y = player.y - VIEW_H/2;
+
+    camera.x = Math.max(0, Math.min(WORLD_W-VIEW_W, camera.x));
+    camera.y = Math.max(0, Math.min(WORLD_H-VIEW_H, camera.y));
+
+}
 
 
 /* =========================================================
    GAME STATE
 ========================================================= */
 
-let started=false;
-let finished=false;
+let started  = false;
+let finished = false;
 
-let starsCollected=0;
-let lettersCollected=0;
+let starsCollected   = 0;
+let lettersCollected = 0;
 
-let dialogOpen=false;
+let dialogOpen = false;
 
-const keys={};
+const keys  = {};
+const touch = { up:false, down:false, left:false, right:false };
 
 
 /* =========================================================
@@ -835,9 +954,7 @@ const stars = [
 
 ];
 
-stars.forEach(s=>{
-    s.taken=false;
-});
+stars.forEach(s=>{ s.taken=false; });
 
 
 /* =========================================================
@@ -846,23 +963,9 @@ stars.forEach(s=>{
 
 const letterObjects = [
 
-    {
-        x:470,
-        y:920,
-        taken:false
-    },
-
-    {
-        x:1330,
-        y:740,
-        taken:false
-    },
-
-    {
-        x:1840,
-        y:650,
-        taken:false
-    }
+    { x:470,  y:920, taken:false },
+    { x:1330, y:740, taken:false },
+    { x:1840, y:650, taken:false }
 
 ];
 
@@ -871,12 +974,13 @@ const letterObjects = [
    GOAL
 ========================================================= */
 
-const goal={
+const goal = {
 
     x:2200,
     y:330,
 
-    unlocked:false
+    unlocked:false,
+    near:false
 
 };
 
@@ -887,47 +991,46 @@ const goal={
 
 let audio;
 
+function getAudio(){
+
+    const AC = window.AudioContext || window.webkitAudioContext;
+
+    if(!AC)
+        return null;
+
+    if(!audio)
+        audio = new AC();
+
+    if(audio.state === "suspended")
+        audio.resume();
+
+    return audio;
+
+}
+
 function beep(freq=440,time=.08){
 
     try{
 
-        if(!audio){
+        const a = getAudio();
 
-            audio =
-                new AudioContext();
+        if(!a)
+            return;
 
-        }
+        const oscillator = a.createOscillator();
+        const gain       = a.createGain();
 
-        const oscillator =
-            audio.createOscillator();
+        oscillator.type = "square";
+        oscillator.frequency.value = freq;
 
-        const gain =
-            audio.createGain();
-
-        oscillator.type="square";
-
-        oscillator.frequency.value=
-            freq;
-
-        gain.gain.setValueAtTime(
-            .035,
-            audio.currentTime
-        );
-
-        gain.gain.exponentialRampToValueAtTime(
-            .001,
-            audio.currentTime+time
-        );
+        gain.gain.setValueAtTime(.035, a.currentTime);
+        gain.gain.exponentialRampToValueAtTime(.001, a.currentTime+time);
 
         oscillator.connect(gain);
-
-        gain.connect(audio.destination);
+        gain.connect(a.destination);
 
         oscillator.start();
-
-        oscillator.stop(
-            audio.currentTime+time
-        );
+        oscillator.stop(a.currentTime+time);
 
     }catch(e){}
 
@@ -940,16 +1043,16 @@ function beep(freq=440,time=.08){
 
 function startGame(){
 
-    document.getElementById("start")
-        .style.display="none";
+    if(started)
+        return;
 
-    started=true;
+    document.getElementById("start").style.display = "none";
+
+    started = true;
 
     beep(523,.1);
 
-    setTimeout(()=>{
-        beep(659,.1);
-    },100);
+    setTimeout(()=>{ beep(659,.1); },100);
 
     requestAnimationFrame(loop);
 
@@ -957,22 +1060,50 @@ function startGame(){
 
 
 /* =========================================================
-   INPUT
+   TOUCH DETECTION
+========================================================= */
+
+if(
+    window.matchMedia("(pointer:coarse)").matches ||
+    window.innerWidth <= 700
+){
+    gameEl.classList.add("is-touch");
+}
+
+/* if a finger ever touches the screen, make sure the pad is shown */
+window.addEventListener(
+    "touchstart",
+    ()=>{ gameEl.classList.add("is-touch"); },
+    { once:true, passive:true }
+);
+
+/* no long-press menu / pinch zoom inside the game */
+gameEl.addEventListener("contextmenu", e=>e.preventDefault());
+document.addEventListener("gesturestart", e=>e.preventDefault());
+
+
+/* =========================================================
+   KEYBOARD INPUT
 ========================================================= */
 
 window.addEventListener(
     "keydown",
     e=>{
 
-        keys[
-            e.key.toLowerCase()
-        ]=true;
+        if(started && (e.code === "Space" || e.key.startsWith("Arrow")))
+            e.preventDefault();
 
-        if(e.code==="Space"){
+        /* SPACE / ENTER = continue dialog */
+        if(dialogOpen && (e.code === "Space" || e.code === "Enter")){
 
-            closeDialog();
+            if(!e.repeat)
+                advanceDialog();
+
+            return;
 
         }
+
+        keys[e.key.toLowerCase()] = true;
 
     }
 );
@@ -980,62 +1111,124 @@ window.addEventListener(
 window.addEventListener(
     "keyup",
     e=>{
+        keys[e.key.toLowerCase()] = false;
+    }
+);
 
-        keys[
-            e.key.toLowerCase()
-        ]=false;
-
+window.addEventListener(
+    "blur",
+    ()=>{
+        for(const k in keys) keys[k] = false;
+        releasePad();
     }
 );
 
 
 /* =========================================================
-   MOBILE
+   TOUCH PAD (8 directions, slide your thumb around)
 ========================================================= */
 
-function mobileButton(id,key){
+const pad = document.getElementById("mobileControls");
 
-    const b =
-        document.getElementById(id);
+const padEls = {
+    up:    document.getElementById("up"),
+    down:  document.getElementById("down"),
+    left:  document.getElementById("left"),
+    right: document.getElementById("right")
+};
 
-    b.addEventListener(
-        "pointerdown",
-        e=>{
+let padPointer = null;
 
-            e.preventDefault();
+function setPad(up,down,left,right){
 
-            keys[key]=true;
+    touch.up = up;
+    touch.down = down;
+    touch.left = left;
+    touch.right = right;
 
-        }
-    );
+    padEls.up.classList.toggle("on", up);
+    padEls.down.classList.toggle("on", down);
+    padEls.left.classList.toggle("on", left);
+    padEls.right.classList.toggle("on", right);
 
-    b.addEventListener(
-        "pointerup",
-        ()=>{
-            keys[key]=false;
-        }
-    );
+}
 
-    b.addEventListener(
-        "pointercancel",
-        ()=>{
-            keys[key]=false;
-        }
+function releasePad(){
+
+    padPointer = null;
+
+    setPad(false,false,false,false);
+
+}
+
+function padMove(e){
+
+    const r  = pad.getBoundingClientRect();
+
+    const dx = e.clientX - (r.left + r.width/2);
+    const dy = e.clientY - (r.top  + r.height/2);
+
+    const len = Math.hypot(dx,dy);
+
+    /* small dead zone in the middle */
+    if(len < r.width * 0.1){
+        setPad(false,false,false,false);
+        return;
+    }
+
+    const nx = dx/len;
+    const ny = dy/len;
+
+    setPad(
+        ny < -0.38,
+        ny >  0.38,
+        nx < -0.38,
+        nx >  0.38
     );
 
 }
 
-mobileButton("up","arrowup");
-mobileButton("down","arrowdown");
-mobileButton("left","arrowleft");
-mobileButton("right","arrowright");
+pad.addEventListener("pointerdown", e=>{
+
+    e.preventDefault();
+    e.stopPropagation();
+
+    padPointer = e.pointerId;
+
+    try{ pad.setPointerCapture(e.pointerId); }catch(err){}
+
+    padMove(e);
+
+});
+
+pad.addEventListener("pointermove", e=>{
+
+    if(e.pointerId !== padPointer)
+        return;
+
+    e.preventDefault();
+
+    padMove(e);
+
+});
+
+function padEnd(e){
+
+    if(e.pointerId === padPointer)
+        releasePad();
+
+}
+
+pad.addEventListener("pointerup", padEnd);
+pad.addEventListener("pointercancel", padEnd);
+pad.addEventListener("lostpointercapture", padEnd);
 
 
 /* =========================================================
    UPDATE
 ========================================================= */
 
-function update(){
+function update(dt){
 
     if(!started || finished)
         return;
@@ -1043,94 +1236,36 @@ function update(){
     if(dialogOpen)
         return;
 
-    let dx=0;
-    let dy=0;
+    let dx = 0;
+    let dy = 0;
 
-    if(keys["w"] || keys["arrowup"])
-        dy--;
-
-    if(keys["s"] || keys["arrowdown"])
-        dy++;
-
-    if(keys["a"] || keys["arrowleft"])
-        dx--;
-
-    if(keys["d"] || keys["arrowright"])
-        dx++;
+    if(keys["w"] || keys["arrowup"]    || touch.up)    dy--;
+    if(keys["s"] || keys["arrowdown"]  || touch.down)  dy++;
+    if(keys["a"] || keys["arrowleft"]  || touch.left)  dx--;
+    if(keys["d"] || keys["arrowright"] || touch.right) dx++;
 
     if(dx || dy){
 
-        const len =
-            Math.sqrt(
-                dx*dx+dy*dy
-            );
+        const len = Math.sqrt(dx*dx+dy*dy);
 
-        dx/=len;
-        dy/=len;
+        dx /= len;
+        dy /= len;
 
-        player.x +=
-            dx*player.speed;
+        player.x += dx * player.speed * dt;
+        player.y += dy * player.speed * dt;
 
-        player.y +=
-            dy*player.speed;
+        player.walk += 15 * dt;
 
-        player.walk += .25;
-
-        if(dx>0)
-            player.direction="right";
-
-        if(dx<0)
-            player.direction="left";
+        if(dx>0) player.direction = "right";
+        if(dx<0) player.direction = "left";
 
     }
 
 
     /* WORLD LIMITS */
 
-    player.x =
-        Math.max(
-            40,
-            Math.min(
-                WORLD_W-40,
-                player.x
-            )
-        );
-
-    player.y =
-        Math.max(
-            80,
-            Math.min(
-                WORLD_H-60,
-                player.y
-            )
-        );
-
-
-    /* CAMERA */
-
-    camera.x =
-        player.x - VIEW_W/2;
-
-    camera.y =
-        player.y - VIEW_H/2;
-
-    camera.x =
-        Math.max(
-            0,
-            Math.min(
-                WORLD_W-VIEW_W,
-                camera.x
-            )
-        );
-
-    camera.y =
-        Math.max(
-            0,
-            Math.min(
-                WORLD_H-VIEW_H,
-                camera.y
-            )
-        );
+    player.x = Math.max(40, Math.min(WORLD_W-40, player.x));
+    player.y = Math.max(80, Math.min(WORLD_H-60, player.y));
 
 
     collectStars();
@@ -1155,28 +1290,20 @@ function collectStars(){
         if(star.taken)
             return;
 
-        const distance =
-            Math.hypot(
-                player.x-star.x,
-                player.y-star.y
-            );
+        const distance = Math.hypot(player.x-star.x, player.y-star.y);
 
-        if(distance<38){
+        if(distance < 38){
 
-            star.taken=true;
+            star.taken = true;
 
             starsCollected++;
 
-            document.getElementById("stars")
-                .textContent=
+            document.getElementById("stars").textContent =
                 `★ ${starsCollected} / 8`;
 
             beep(880,.07);
 
-            setTimeout(
-                ()=>beep(1200,.07),
-                70
-            );
+            setTimeout(()=>beep(1200,.07),70);
 
             showNotification(
                 "★ ОД ОЛДЛОО!",
@@ -1193,7 +1320,7 @@ function collectStars(){
 
 
 /* =========================================================
-   LETTERS
+   LETTERS (pick-up lines)
 ========================================================= */
 
 function collectLetters(){
@@ -1203,27 +1330,26 @@ function collectLetters(){
         if(letter.taken)
             return;
 
-        const distance =
-            Math.hypot(
-                player.x-letter.x,
-                player.y-letter.y
-            );
+        const distance = Math.hypot(player.x-letter.x, player.y-letter.y);
 
-        if(distance<40){
+        if(distance < 40){
 
-            letter.taken=true;
+            letter.taken = true;
 
             lettersCollected++;
 
-            document.getElementById("letters")
-                .textContent=
+            document.getElementById("letters").textContent =
                 `✉ ${lettersCollected} / 3`;
 
             beep(600,.08);
 
-            showNotification(
-                "✉ НУУЦ ЗАХИДАЛ",
-                letters[index]
+            setTimeout(()=>beep(760,.08),80);
+
+            /* opens as a dialog: tap / SPACE to flip through the pages */
+            showDialog(
+                `💌 НУУЦ ЗАХИДАЛ ${index+1}/3`,
+                pickupLines[index],
+                "letter"
             );
 
             updateQuest();
@@ -1241,12 +1367,11 @@ function collectLetters(){
 
 function updateQuest(){
 
-    const quest =
-        document.getElementById("quest");
+    const quest = document.getElementById("quest");
 
-    if(starsCollected<8){
+    if(starsCollected < 8){
 
-        quest.innerHTML=
+        quest.innerHTML =
             `📜 Даалгавар:<br>
              Оддыг цуглуул.
              (${starsCollected}/8)<br>
@@ -1255,11 +1380,11 @@ function updateQuest(){
 
     }else{
 
-        quest.innerHTML=
+        quest.innerHTML =
             `🔓 Шинэ даалгавар:<br>
              Сүүлчийн хаалга руу оч.`;
 
-        goal.unlocked=true;
+        goal.unlocked = true;
 
     }
 
@@ -1270,26 +1395,26 @@ function updateQuest(){
    NPC
 ========================================================= */
 
-let lastNPC=null;
-
 function checkNPC(){
 
-    npcs.forEach((npc,index)=>{
+    npcs.forEach(npc=>{
 
-        const distance =
-            Math.hypot(
-                player.x-npc.x,
-                player.y-npc.y
-            );
+        const distance = Math.hypot(player.x-npc.x, player.y-npc.y);
 
-        if(distance<60 && lastNPC!==index){
+        if(distance < 60){
 
-            lastNPC=index;
+            if(!npc.inRange){
 
-            showDialog(
-                npc.name,
-                npc.text
-            );
+                npc.inRange = true;
+
+                showDialog(npc.name, npc.text, "npc");
+
+            }
+
+        }else if(distance > 95){
+
+            /* walk away, come back = talk again */
+            npc.inRange = false;
 
         }
 
@@ -1299,39 +1424,128 @@ function checkNPC(){
 
 
 /* =========================================================
-   DIALOG
+   DIALOG  (multi-page, tap / SPACE to continue)
 ========================================================= */
 
-function showDialog(name,texts){
+const dialogEl     = document.getElementById("dialog");
+const dialogBoxEl  = document.getElementById("dialogBox");
+const dialogNameEl = document.getElementById("dialogName");
+const dialogPageEl = document.getElementById("dialogPage");
+const dialogTextEl = document.getElementById("dialogText");
+const dialogNextEl = document.getElementById("dialogNext");
 
-    dialogOpen=true;
+let dialogPages = [];
+let dialogIndex = 0;
+let dialogLock  = 0;
+const dialogQueue = [];
 
-    document.getElementById("dialog")
-        .style.display="block";
+function showDialog(name, pages, kind="npc"){
 
-    document.getElementById("dialogName")
-        .textContent=name;
+    /* another dialog is already open -> wait in line */
+    if(dialogOpen){
+        dialogQueue.push({name,pages,kind});
+        return;
+    }
 
-    document.getElementById("dialogText")
-        .innerHTML=
-        texts.join("<br><br>");
+    dialogOpen  = true;
+    dialogPages = pages;
+    dialogIndex = 0;
+
+    /* ignore the first ~0.3s of taps so a stray tap can't skip it */
+    dialogLock = performance.now() + 300;
+
+    dialogNameEl.textContent = name;
+
+    dialogBoxEl.classList.toggle("letter", kind === "letter");
+
+    dialogEl.style.display = "block";
+
+    gameEl.classList.add("dialog-open");
+
+    hideNotification();
+
+    renderDialog();
 
     beep(400,.08);
 
 }
 
+function renderDialog(){
+
+    dialogTextEl.textContent = dialogPages[dialogIndex];
+
+    dialogPageEl.textContent =
+        `${dialogIndex+1}/${dialogPages.length}`;
+
+    dialogNextEl.textContent =
+        dialogIndex < dialogPages.length-1
+            ? "▼ TAP / SPACE"
+            : "✔ TAP / SPACE";
+
+}
+
+function advanceDialog(){
+
+    if(!dialogOpen)
+        return;
+
+    if(performance.now() < dialogLock)
+        return;
+
+    dialogLock = performance.now() + 120;
+
+    if(dialogIndex < dialogPages.length-1){
+
+        dialogIndex++;
+
+        renderDialog();
+
+        beep(500,.04);
+
+    }else{
+
+        closeDialog();
+
+    }
+
+}
 
 function closeDialog(){
 
     if(!dialogOpen)
         return;
 
-    dialogOpen=false;
+    dialogOpen = false;
 
-    document.getElementById("dialog")
-        .style.display="none";
+    dialogEl.style.display = "none";
+
+    gameEl.classList.remove("dialog-open");
+
+    if(dialogQueue.length){
+
+        const next = dialogQueue.shift();
+
+        showDialog(next.name, next.pages, next.kind);
+
+    }
 
 }
+
+/* tap / click anywhere on the game = continue */
+gameEl.addEventListener(
+    "pointerdown",
+    e=>{
+
+        if(dialogOpen){
+
+            e.preventDefault();
+
+            advanceDialog();
+
+        }
+
+    }
+);
 
 
 /* =========================================================
@@ -1340,26 +1554,28 @@ function closeDialog(){
 
 function checkGoal(){
 
-    const distance =
-        Math.hypot(
-            player.x-goal.x,
-            player.y-goal.y
-        );
+    const distance = Math.hypot(player.x-goal.x, player.y-goal.y);
 
-    if(distance<65){
+    if(distance < 65){
 
         if(goal.unlocked){
 
             finishGame();
 
-        }else{
+        }else if(!goal.near){
+
+            goal.near = true;
 
             showNotification(
                 "🔒 ХААЛГА ТҮГЖЭЭТЭЙ",
-                "Бүх 8 одыг цуглуул."
+                `Бүх 8 одыг цуглуул.\n(${starsCollected}/8)`
             );
 
         }
+
+    }else{
+
+        goal.near = false;
 
     }
 
@@ -1370,35 +1586,29 @@ function checkGoal(){
    NOTIFICATION
 ========================================================= */
 
+const notifEl = document.getElementById("notification");
+
 let notificationTimer;
 
 function showNotification(title,text){
 
-    const box =
-        document.getElementById(
-            "notification"
-        );
+    notifEl.innerHTML =
+        `<div class="notifTitle">${title}</div>
+         <div class="notifText">${text}</div>`;
 
-    box.innerHTML=
-        `<div style="
-            color:#ff86bd;
-            margin-bottom:12px;
-        ">${title}</div>
-
-        <div style="
-            white-space:pre-line;
-        ">${text}</div>`;
-
-    box.style.display="block";
+    notifEl.style.display = "block";
 
     clearTimeout(notificationTimer);
 
-    notificationTimer=
-        setTimeout(()=>{
+    notificationTimer = setTimeout(hideNotification,3000);
 
-            box.style.display="none";
+}
 
-        },3000);
+function hideNotification(){
+
+    clearTimeout(notificationTimer);
+
+    notifEl.style.display = "none";
 
 }
 
@@ -1412,24 +1622,19 @@ function finishGame(){
     if(finished)
         return;
 
-    finished=true;
+    finished = true;
+
+    releasePad();
 
     beep(523,.12);
 
-    setTimeout(
-        ()=>beep(659,.12),
-        120
-    );
+    setTimeout(()=>beep(659,.12),120);
 
-    setTimeout(
-        ()=>beep(784,.18),
-        240
-    );
+    setTimeout(()=>beep(784,.18),240);
 
     setTimeout(()=>{
 
-        document.getElementById("final")
-            .style.display="flex";
+        document.getElementById("final").style.display = "flex";
 
     },700);
 
@@ -1442,32 +1647,19 @@ function finishGame(){
 
 function draw(){
 
-    ctx.clearRect(
-        0,
-        0,
-        canvas.width,
-        canvas.height
-    );
+    ctx.setTransform(1,0,0,1,0,0);
 
-    ctx.save();
+    ctx.clearRect(0,0,canvas.width,canvas.height);
 
-    /*
-       Scale canvas coordinate system
-       to CSS pixel dimensions.
-    */
+    ctx.imageSmoothingEnabled = false;
 
-    const sx =
-        canvas.width / VIEW_W;
+    const sx = canvas.width  / VIEW_W;
+    const sy = canvas.height / VIEW_H;
 
-    const sy =
-        canvas.height / VIEW_H;
+    const cx = Math.round(camera.x);
+    const cy = Math.round(camera.y);
 
-    ctx.scale(sx,sy);
-
-    ctx.translate(
-        -camera.x,
-        -camera.y
-    );
+    ctx.setTransform(sx,0,0,sy,-cx*sx,-cy*sy);
 
     drawWorld();
 
@@ -1481,9 +1673,11 @@ function draw(){
 
     drawPlayer();
 
-    ctx.restore();
+    ctx.setTransform(1,0,0,1,0,0);
 
 }
+
+const R = (x,y,w,h)=>ctx.fillRect(x,y,w,h);
 
 
 /* =========================================================
@@ -1494,149 +1688,73 @@ function drawWorld(){
 
     /* SKY */
 
-    ctx.fillStyle="#171126";
-
-    ctx.fillRect(
-        0,
-        0,
-        WORLD_W,
-        WORLD_H
-    );
+    ctx.fillStyle = "#171126";
+    R(0,0,WORLD_W,WORLD_H);
 
 
     /* MOON */
 
-    ctx.fillStyle="#ffeab2";
+    ctx.fillStyle = "#ffeab2";
+    R(1900,110,55,55);
 
-    ctx.fillRect(
-        1900,
-        110,
-        55,
-        55
-    );
-
-    ctx.fillStyle="#171126";
-
-    ctx.fillRect(
-        1920,
-        95,
-        55,
-        55
-    );
+    ctx.fillStyle = "#171126";
+    R(1920,95,55,55);
 
 
     /* SKY STARS */
 
-    const skyStars=[
+    const skyStars = [
 
-        [100,150],
-        [240,90],
-        [390,180],
-        [530,110],
-        [680,200],
-        [830,100],
-        [980,170],
-        [1140,80],
-        [1280,160],
-        [1440,90],
-        [1590,190],
-        [1760,120],
-        [2070,180],
-        [2250,90]
+        [100,150],[240,90],[390,180],[530,110],
+        [680,200],[830,100],[980,170],[1140,80],
+        [1280,160],[1440,90],[1590,190],[1760,120],
+        [2070,180],[2250,90]
 
     ];
 
-    ctx.fillStyle="#fff2c9";
+    ctx.fillStyle = "#fff2c9";
 
-    skyStars.forEach(
-        ([x,y])=>{
-            ctx.fillRect(
-                x,
-                y,
-                3,
-                3
-            );
-        }
-    );
+    skyStars.forEach(([x,y])=>{ R(x,y,3,3); });
 
 
     /* MOUNTAINS */
 
-    ctx.fillStyle="#282044";
+    ctx.fillStyle = "#282044";
 
     ctx.beginPath();
 
     ctx.moveTo(0,650);
 
-    for(
-        let x=0;
-        x<=WORLD_W;
-        x+=150
-    ){
+    for(let x=0; x<=WORLD_W; x+=150){
 
-        const h =
-            150 +
-            ((x*37)%180);
+        const h = 150 + ((x*37)%180);
 
-        ctx.lineTo(
-            x,
-            650-h
-        );
+        ctx.lineTo(x, 650-h);
 
     }
 
-    ctx.lineTo(
-        WORLD_W,
-        WORLD_H
-    );
-
-    ctx.lineTo(
-        0,
-        WORLD_H
-    );
+    ctx.lineTo(WORLD_W,WORLD_H);
+    ctx.lineTo(0,WORLD_H);
 
     ctx.fill();
 
 
     /* GROUND */
 
-    ctx.fillStyle="#203a2f";
-
-    ctx.fillRect(
-        0,
-        650,
-        WORLD_W,
-        WORLD_H
-    );
+    ctx.fillStyle = "#203a2f";
+    R(0,650,WORLD_W,WORLD_H);
 
 
     /* GRASS */
 
-    ctx.fillStyle="#31503c";
+    ctx.fillStyle = "#31503c";
 
-    for(
-        let x=0;
-        x<WORLD_W;
-        x+=35
-    ){
+    for(let x=0; x<WORLD_W; x+=35){
 
-        const y=
-            680+
-            ((x*13)%500);
+        const y = 680 + ((x*13)%500);
 
-        ctx.fillRect(
-            x,
-            y,
-            4,
-            11
-        );
-
-        ctx.fillRect(
-            x+8,
-            y+5,
-            3,
-            7
-        );
+        R(x,   y,   4, 11);
+        R(x+8, y+5, 3, 7);
 
     }
 
@@ -1658,100 +1776,43 @@ function drawWorld(){
    ROADS
 ========================================================= */
 
+const ROAD = [
+    [120,1080],
+    [500,900],
+    [850,760],
+    [1150,700],
+    [1450,590],
+    [1750,550],
+    [2200,330]
+];
+
+function roadPath(){
+
+    ctx.beginPath();
+
+    ctx.moveTo(ROAD[0][0], ROAD[0][1]);
+
+    for(let i=1; i<ROAD.length; i++)
+        ctx.lineTo(ROAD[i][0], ROAD[i][1]);
+
+    ctx.stroke();
+
+}
+
 function drawRoads(){
 
-    ctx.strokeStyle="#604c45";
+    ctx.strokeStyle = "#604c45";
+    ctx.lineWidth   = 85;
+    ctx.lineCap     = "square";
 
-    ctx.lineWidth=85;
+    roadPath();
 
-    ctx.lineCap="square";
+    ctx.strokeStyle = "#80645a";
+    ctx.lineWidth   = 4;
 
-    ctx.beginPath();
+    ctx.setLineDash([18,20]);
 
-    ctx.moveTo(
-        120,
-        1080
-    );
-
-    ctx.lineTo(
-        500,
-        900
-    );
-
-    ctx.lineTo(
-        850,
-        760
-    );
-
-    ctx.lineTo(
-        1150,
-        700
-    );
-
-    ctx.lineTo(
-        1450,
-        590
-    );
-
-    ctx.lineTo(
-        1750,
-        550
-    );
-
-    ctx.lineTo(
-        2200,
-        330
-    );
-
-    ctx.stroke();
-
-
-    ctx.strokeStyle="#80645a";
-
-    ctx.lineWidth=4;
-
-    ctx.setLineDash(
-        [18,20]
-    );
-
-    ctx.beginPath();
-
-    ctx.moveTo(
-        120,
-        1080
-    );
-
-    ctx.lineTo(
-        500,
-        900
-    );
-
-    ctx.lineTo(
-        850,
-        760
-    );
-
-    ctx.lineTo(
-        1150,
-        700
-    );
-
-    ctx.lineTo(
-        1450,
-        590
-    );
-
-    ctx.lineTo(
-        1750,
-        550
-    );
-
-    ctx.lineTo(
-        2200,
-        330
-    );
-
-    ctx.stroke();
+    roadPath();
 
     ctx.setLineDash([]);
 
@@ -1764,70 +1825,30 @@ function drawRoads(){
 
 function drawTrees(){
 
-    const trees=[
+    const trees = [
 
-        [120,760],
-        [250,670],
-        [330,1120],
-        [620,650],
-        [760,1180],
-        [940,820],
-        [1100,980],
-        [1270,580],
-        [1430,1040],
-        [1610,700],
-        [1750,970],
-        [1900,780],
-        [2050,560],
-        [2320,500],
-        [2250,850]
+        [120,760],[250,670],[330,1120],[620,650],
+        [760,1180],[940,820],[1100,980],[1270,580],
+        [1430,1040],[1610,700],[1750,970],[1900,780],
+        [2050,560],[2320,500],[2250,850]
 
     ];
 
-    trees.forEach(
-        ([x,y])=>{
-            drawTree(x,y);
-        }
-    );
+    trees.forEach(([x,y])=>{ drawTree(x,y); });
 
 }
 
-
 function drawTree(x,y){
 
-    ctx.fillStyle="#493329";
+    ctx.fillStyle = "#493329";
+    R(x-7, y+25, 14, 48);
 
-    ctx.fillRect(
-        x-7,
-        y+25,
-        14,
-        48
-    );
+    ctx.fillStyle = "#214b35";
+    R(x-32, y-5,  64, 40);
+    R(x-23, y-30, 46, 35);
 
-    ctx.fillStyle="#214b35";
-
-    ctx.fillRect(
-        x-32,
-        y-5,
-        64,
-        40
-    );
-
-    ctx.fillRect(
-        x-23,
-        y-30,
-        46,
-        35
-    );
-
-    ctx.fillStyle="#2d6442";
-
-    ctx.fillRect(
-        x-15,
-        y-43,
-        30,
-        30
-    );
+    ctx.fillStyle = "#2d6442";
+    R(x-15, y-43, 30, 30);
 
 }
 
@@ -1838,75 +1859,38 @@ function drawTree(x,y){
 
 function drawHouse(){
 
-    const x=1040;
-    const y=460;
+    const x = 1040;
+    const y = 460;
 
     /* body */
 
-    ctx.fillStyle="#704b55";
-
-    ctx.fillRect(
-        x,
-        y+45,
-        180,
-        130
-    );
+    ctx.fillStyle = "#704b55";
+    R(x, y+45, 180, 130);
 
     /* roof */
 
-    ctx.fillStyle="#352442";
+    ctx.fillStyle = "#352442";
 
     ctx.beginPath();
 
-    ctx.moveTo(
-        x-25,
-        y+50
-    );
-
-    ctx.lineTo(
-        x+90,
-        y-40
-    );
-
-    ctx.lineTo(
-        x+205,
-        y+50
-    );
+    ctx.moveTo(x-25,  y+50);
+    ctx.lineTo(x+90,  y-40);
+    ctx.lineTo(x+205, y+50);
 
     ctx.closePath();
 
     ctx.fill();
 
-
     /* door */
 
-    ctx.fillStyle="#2b1d2c";
-
-    ctx.fillRect(
-        x+72,
-        y+95,
-        38,
-        80
-    );
-
+    ctx.fillStyle = "#2b1d2c";
+    R(x+72, y+95, 38, 80);
 
     /* windows */
 
-    ctx.fillStyle="#ffd66a";
-
-    ctx.fillRect(
-        x+20,
-        y+80,
-        35,
-        30
-    );
-
-    ctx.fillRect(
-        x+125,
-        y+80,
-        35,
-        30
-    );
+    ctx.fillStyle = "#ffd66a";
+    R(x+20,  y+80, 35, 30);
+    R(x+125, y+80, 35, 30);
 
 }
 
@@ -1917,36 +1901,15 @@ function drawHouse(){
 
 function drawLake(){
 
-    ctx.fillStyle="#244c68";
+    ctx.fillStyle = "#244c68";
+    R(1450,760,350,210);
 
-    ctx.fillRect(
-        1450,
-        760,
-        350,
-        210
-    );
+    ctx.fillStyle = "#36799a";
 
-    ctx.fillStyle="#36799a";
+    for(let y=790; y<950; y+=28){
 
-    for(
-        let y=790;
-        y<950;
-        y+=28
-    ){
-
-        ctx.fillRect(
-            1480,
-            y,
-            100,
-            3
-        );
-
-        ctx.fillRect(
-            1640,
-            y+10,
-            130,
-            3
-        );
+        R(1480, y,    100, 3);
+        R(1640, y+10, 130, 3);
 
     }
 
@@ -1959,42 +1922,21 @@ function drawLake(){
 
 function drawFlowers(){
 
-    const flowers=[
+    const flowers = [
 
-        [430,760],
-        [520,700],
-        [880,930],
-        [1210,830],
-        [1370,1050],
-        [1820,750],
-        [2010,600]
+        [430,760],[520,700],[880,930],[1210,830],
+        [1370,1050],[1820,750],[2010,600]
 
     ];
 
-    flowers.forEach(
-        ([x,y],i)=>{
+    flowers.forEach(([x,y],i)=>{
 
-            ctx.fillStyle =
-                i%2===0
-                ? "#ff80b5"
-                : "#ffd75a";
+        ctx.fillStyle = i%2===0 ? "#ff80b5" : "#ffd75a";
 
-            ctx.fillRect(
-                x,
-                y,
-                5,
-                5
-            );
+        R(x,   y,   5,  5);
+        R(x-5, y+5, 15, 5);
 
-            ctx.fillRect(
-                x-5,
-                y+5,
-                15,
-                5
-            );
-
-        }
-    );
+    });
 
 }
 
@@ -2010,55 +1952,25 @@ function drawStars(){
         if(star.taken)
             return;
 
-        const pulse=
-            Math.sin(
-                Date.now()/220+
-                star.x
-            )*4;
+        const pulse = Math.sin(Date.now()/220 + star.x) * 4;
 
-        drawPixelStar(
-            star.x,
-            star.y+pulse
-        );
+        drawPixelStar(star.x, star.y+pulse);
 
     });
 
 }
 
-
 function drawPixelStar(x,y){
 
-    ctx.fillStyle="#ffd75a";
+    ctx.fillStyle = "#ffd75a";
 
-    ctx.fillRect(
-        x-4,
-        y-15,
-        8,
-        30
-    );
+    R(x-4,  y-15, 8,  30);
+    R(x-15, y-4,  30, 8);
+    R(x-8,  y-8,  16, 16);
 
-    ctx.fillRect(
-        x-15,
-        y-4,
-        30,
-        8
-    );
+    ctx.fillStyle = "#fff5a6";
 
-    ctx.fillRect(
-        x-8,
-        y-8,
-        16,
-        16
-    );
-
-    ctx.fillStyle="#fff5a6";
-
-    ctx.fillRect(
-        x-4,
-        y-7,
-        8,
-        8
-    );
+    R(x-4, y-7, 8, 8);
 
 }
 
@@ -2074,30 +1986,12 @@ function drawLetters(){
         if(letter.taken)
             return;
 
-        ctx.fillStyle="#fff4d6";
+        ctx.fillStyle = "#fff4d6";
+        R(letter.x-10, letter.y-8, 20, 16);
 
-        ctx.fillRect(
-            letter.x-10,
-            letter.y-8,
-            20,
-            16
-        );
-
-        ctx.fillStyle="#d86d9b";
-
-        ctx.fillRect(
-            letter.x-10,
-            letter.y-8,
-            20,
-            3
-        );
-
-        ctx.fillRect(
-            letter.x-7,
-            letter.y-2,
-            14,
-            2
-        );
+        ctx.fillStyle = "#d86d9b";
+        R(letter.x-10, letter.y-8, 20, 3);
+        R(letter.x-7,  letter.y-2, 14, 2);
 
     });
 
@@ -2110,24 +2004,17 @@ function drawLetters(){
 
 function drawNPCs(){
 
-    npcs.forEach(
-        (npc,index)=>{
+    npcs.forEach((npc,index)=>{
 
-            drawCharacter(
-                npc.x,
-                npc.y,
-                index
-            );
+        drawCharacter(npc.x, npc.y, index);
 
-        }
-    );
+    });
 
 }
 
-
 function drawCharacter(x,y,index){
 
-    const colors=[
+    const colors = [
         "#ff86bd",
         "#8db8ff",
         "#a87de0",
@@ -2136,97 +2023,36 @@ function drawCharacter(x,y,index){
 
     /* shadow */
 
-    ctx.fillStyle=
-        "rgba(0,0,0,.3)";
-
-    ctx.fillRect(
-        x-16,
-        y+30,
-        32,
-        7
-    );
-
+    ctx.fillStyle = "rgba(0,0,0,.3)";
+    R(x-16, y+30, 32, 7);
 
     /* body */
 
-    ctx.fillStyle=
-        colors[index];
-
-    ctx.fillRect(
-        x-13,
-        y+4,
-        26,
-        26
-    );
-
+    ctx.fillStyle = colors[index];
+    R(x-13, y+4, 26, 26);
 
     /* head */
 
-    ctx.fillStyle="#efc19f";
-
-    ctx.fillRect(
-        x-12,
-        y-18,
-        24,
-        23
-    );
-
+    ctx.fillStyle = "#efc19f";
+    R(x-12, y-18, 24, 23);
 
     /* hair */
 
-    ctx.fillStyle="#35233a";
-
-    ctx.fillRect(
-        x-14,
-        y-21,
-        28,
-        9
-    );
-
-    ctx.fillRect(
-        x-14,
-        y-14,
-        6,
-        17
-    );
-
+    ctx.fillStyle = "#35233a";
+    R(x-14, y-21, 28, 9);
+    R(x-14, y-14, 6,  17);
 
     /* eyes */
 
-    ctx.fillStyle="#17121d";
-
-    ctx.fillRect(
-        x-7,
-        y-6,
-        3,
-        3
-    );
-
-    ctx.fillRect(
-        x+5,
-        y-6,
-        3,
-        3
-    );
-
+    ctx.fillStyle = "#17121d";
+    R(x-7, y-6, 3, 3);
+    R(x+5, y-6, 3, 3);
 
     /* legs */
 
-    ctx.fillStyle="#29243c";
-
-    ctx.fillRect(
-        x-10,
-        y+30,
-        8,
-        13
-    );
-
-    ctx.fillRect(
-        x+3,
-        y+30,
-        8,
-        13
-    );
+    ctx.fillStyle = "#29243c";
+    R(x-10, y+30, 8, 13);
+    R(x+3,  y+30, 8, 13);
 
 }
 
@@ -2237,61 +2063,32 @@ function drawCharacter(x,y,index){
 
 function drawGoal(){
 
-    const pulse=
-        Math.sin(
-            Date.now()/250
-        )*5;
+    const pulse = Math.sin(Date.now()/250) * 5;
 
-    ctx.fillStyle=
-        goal.unlocked
+    ctx.fillStyle = goal.unlocked
         ? "rgba(255,92,157,.18)"
         : "rgba(100,100,100,.15)";
 
-    ctx.fillRect(
+    R(
         goal.x-20-pulse/2,
         goal.y-20-pulse/2,
         90+pulse,
         90+pulse
     );
 
+    ctx.strokeStyle = goal.unlocked ? "#ff86bd" : "#666";
+    ctx.lineWidth   = 5;
 
-    ctx.strokeStyle=
-        goal.unlocked
-        ? "#ff86bd"
-        : "#666";
+    ctx.strokeRect(goal.x, goal.y, 50, 65);
 
-    ctx.lineWidth=5;
+    ctx.fillStyle = goal.unlocked ? "#ff5c9d" : "#333";
+    R(goal.x+10, goal.y+10, 30, 45);
 
-    ctx.strokeRect(
-        goal.x,
-        goal.y,
-        50,
-        65
-    );
-
-
-    ctx.fillStyle=
-        goal.unlocked
-        ? "#ff5c9d"
-        : "#333";
-
-    ctx.fillRect(
-        goal.x+10,
-        goal.y+10,
-        30,
-        45
-    );
-
-
-    ctx.fillStyle="white";
-
-    ctx.font=
-        "10px 'Press Start 2P'";
+    ctx.fillStyle = "white";
+    ctx.font = "10px 'Press Start 2P'";
 
     ctx.fillText(
-        goal.unlocked
-        ? "♥"
-        : "×",
+        goal.unlocked ? "♥" : "×",
         goal.x+18,
         goal.y+38
     );
@@ -2300,205 +2097,75 @@ function drawGoal(){
 
 
 /* =========================================================
-   FEMALE PLAYER
+   PLAYER
 ========================================================= */
 
 function drawPlayer(){
 
-    const x=player.x;
-
-    const y=
-        player.y+
-        Math.sin(player.walk)*2;
-
+    const x = player.x;
+    const y = player.y + Math.sin(player.walk)*2;
 
     /* shadow */
 
-    ctx.fillStyle=
-        "rgba(0,0,0,.45)";
+    ctx.fillStyle = "rgba(0,0,0,.45)";
+    R(x-17, y+35, 34, 8);
 
-    ctx.fillRect(
-        x-17,
-        y+35,
-        34,
-        8
-    );
+    /* hair BACK (long hair) */
 
-
-    /* hair BACK */
-
-    ctx.fillStyle=
-        player.hair;
-
-    ctx.fillRect(
-        x-16,
-        y-17,
-        32,
-        38
-    );
-
-    /*
-       Long hair
-    */
-
-    ctx.fillRect(
-        x-19,
-        y-8,
-        8,
-        34
-    );
-
-    ctx.fillRect(
-        x+11,
-        y-8,
-        8,
-        34
-    );
-
+    ctx.fillStyle = player.hair;
+    R(x-16, y-17, 32, 38);
+    R(x-19, y-8,  8,  34);
+    R(x+11, y-8,  8,  34);
 
     /* body / dress */
 
-    ctx.fillStyle=
-        player.dress;
-
-    ctx.fillRect(
-        x-14,
-        y+7,
-        28,
-        25
-    );
+    ctx.fillStyle = player.dress;
+    R(x-14, y+7,  28, 25);
 
     /* skirt */
 
-    ctx.fillRect(
-        x-19,
-        y+22,
-        38,
-        12
-    );
-
+    R(x-19, y+22, 38, 12);
 
     /* head */
 
-    ctx.fillStyle=
-        player.skin;
+    ctx.fillStyle = player.skin;
+    R(x-11, y-17, 22, 24);
 
-    ctx.fillRect(
-        x-11,
-        y-17,
-        22,
-        24
-    );
+    /* hair top + side fringe */
 
-
-    /* hair top */
-
-    ctx.fillStyle=
-        player.hair;
-
-    ctx.fillRect(
-        x-14,
-        y-21,
-        28,
-        10
-    );
-
-    /* side fringe */
-
-    ctx.fillRect(
-        x-13,
-        y-15,
-        7,
-        12
-    );
-
+    ctx.fillStyle = player.hair;
+    R(x-14, y-21, 28, 10);
+    R(x-13, y-15, 7,  12);
 
     /* bow */
 
-    ctx.fillStyle=
-        "#ff9bc7";
-
-    ctx.fillRect(
-        x+9,
-        y-19,
-        9,
-        7
-    );
-
-    ctx.fillRect(
-        x+14,
-        y-14,
-        6,
-        6
-    );
-
+    ctx.fillStyle = "#ff9bc7";
+    R(x+9,  y-19, 9, 7);
+    R(x+14, y-14, 6, 6);
 
     /* eyes */
 
-    ctx.fillStyle="#18131d";
-
-    ctx.fillRect(
-        x-7,
-        y-5,
-        3,
-        4
-    );
-
-    ctx.fillRect(
-        x+5,
-        y-5,
-        3,
-        4
-    );
-
+    ctx.fillStyle = "#18131d";
+    R(x-7, y-5, 3, 4);
+    R(x+5, y-5, 3, 4);
 
     /* tiny smile */
 
-    ctx.fillRect(
-        x-2,
-        y+1,
-        5,
-        2
-    );
-
+    R(x-2, y+1, 5, 2);
 
     /* legs */
 
-    ctx.fillStyle="#40304a";
+    ctx.fillStyle = "#40304a";
 
-    if(
-        Math.floor(player.walk)%2===0
-    ){
+    if(Math.floor(player.walk)%2 === 0){
 
-        ctx.fillRect(
-            x-10,
-            y+34,
-            8,
-            12
-        );
-
-        ctx.fillRect(
-            x+4,
-            y+37,
-            8,
-            9
-        );
+        R(x-10, y+34, 8, 12);
+        R(x+4,  y+37, 8, 9);
 
     }else{
 
-        ctx.fillRect(
-            x-10,
-            y+37,
-            8,
-            9
-        );
-
-        ctx.fillRect(
-            x+4,
-            y+34,
-            8,
-            12
-        );
+        R(x-10, y+37, 8, 9);
+        R(x+4,  y+34, 8, 12);
 
     }
 
@@ -2506,19 +2173,42 @@ function drawPlayer(){
 
 
 /* =========================================================
-   LOOP
+   LOOP  (delta-time: same speed on 60Hz / 120Hz phones)
 ========================================================= */
 
-function loop(){
+let lastTime = 0;
 
-    update();
+function loop(t){
+
+    if(!lastTime)
+        lastTime = t;
+
+    const dt = Math.min((t - lastTime)/1000, 0.05);
+
+    lastTime = t;
+
+    update(dt);
+
+    updateCamera();
 
     draw();
 
-    if(started)
-        requestAnimationFrame(loop);
+    requestAnimationFrame(loop);
 
 }
+
+
+/* =========================================================
+   INIT
+========================================================= */
+
+window.addEventListener("resize", resize);
+window.addEventListener("orientationchange", ()=>{ setTimeout(resize,250); });
+
+if(window.ResizeObserver)
+    new ResizeObserver(resize).observe(gameEl);
+
+resize();
 
 </script>
 
@@ -2526,4 +2216,3 @@ function loop(){
 
 </body>
 </html>
-```
