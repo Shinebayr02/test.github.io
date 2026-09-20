@@ -1,42 +1,1168 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="mn">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <style>
-        h1{
-            color: red;
-            font-size: 50px;
-            text-align: center;
-        }
-        .btn{
-            padding: 10px 20px;
-            font-size: 20px;
-            background-color: blue;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
+<title>Чам руу хүрэх зам</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+:root {
+    --pink: #ff4f9a;
+    --pink2: #ff86bd;
+    --purple: #6b3fa0;
+    --dark: #120d1c;
+    --night: #211735;
+    --cream: #ffe9c7;
+    --green: #63c174;
+    --yellow: #ffd75a;
+}
+
+* {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+}
+
+html,
+body {
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: #09070e;
+    font-family: "Press Start 2P", monospace;
+    color: white;
+}
+
+body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* =========================
+   GAME
+========================= */
+
+#game-wrapper {
+    position: relative;
+    width: min(100vw, 1100px);
+    height: min(100vh, 700px);
+    background: var(--night);
+    overflow: hidden;
+    image-rendering: pixelated;
+}
+
+canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    image-rendering: pixelated;
+}
+
+/* =========================
+   CRT EFFECT
+========================= */
+
+#game-wrapper::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background:
+        repeating-linear-gradient(
+            to bottom,
+            rgba(255,255,255,.025) 0px,
+            rgba(255,255,255,.025) 1px,
+            transparent 2px,
+            transparent 4px
+        );
+    z-index: 20;
+}
+
+/* =========================
+   HUD
+========================= */
+
+#hud {
+    position: absolute;
+    top: 14px;
+    left: 14px;
+    right: 14px;
+    z-index: 10;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    pointer-events: none;
+}
+
+.hud-box {
+    padding: 10px 12px;
+    background: rgba(18,13,28,.85);
+    border: 3px solid #fff;
+    box-shadow: 4px 4px 0 #000;
+    font-size: 9px;
+    line-height: 1.8;
+}
+
+#title-hud {
+    color: var(--pink2);
+}
+
+#hearts {
+    color: var(--pink2);
+    letter-spacing: 4px;
+}
+
+#stars {
+    color: var(--yellow);
+}
+
+/* =========================
+   START SCREEN
+========================= */
+
+.overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 50;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background:
+        radial-gradient(circle at center, rgba(107,63,160,.35), transparent 60%),
+        rgba(9,7,14,.92);
+}
+
+.panel {
+    width: min(650px, 94vw);
+    padding: 35px 28px;
+    text-align: center;
+    background: #171020;
+    border: 5px solid white;
+    box-shadow:
+        8px 8px 0 #000,
+        0 0 0 5px var(--pink);
+}
+
+.logo {
+    color: var(--pink2);
+    font-size: clamp(18px, 4vw, 32px);
+    line-height: 1.7;
+    text-shadow: 4px 4px 0 #552454;
+}
+
+.subtitle {
+    margin: 25px auto;
+    color: var(--cream);
+    font-size: 10px;
+    line-height: 2.2;
+    max-width: 520px;
+}
+
+.pixel-button {
+    display: inline-block;
+    border: 0;
+    background: var(--pink);
+    color: white;
+    font-family: inherit;
+    font-size: 11px;
+    padding: 16px 20px;
+    cursor: pointer;
+    box-shadow: 5px 5px 0 #7b2351;
+    transition: transform .08s;
+}
+
+.pixel-button:hover {
+    transform: translate(2px,2px);
+    box-shadow: 3px 3px 0 #7b2351;
+}
+
+.pixel-button:active {
+    transform: translate(5px,5px);
+    box-shadow: none;
+}
+
+/* =========================
+   DIALOG
+========================= */
+
+#dialog {
+    position: absolute;
+    left: 5%;
+    right: 5%;
+    bottom: 30px;
+    z-index: 30;
+    display: none;
+}
+
+.dialog-box {
+    background: #120d1c;
+    border: 4px solid white;
+    box-shadow: 7px 7px 0 #000;
+    padding: 20px;
+    min-height: 100px;
+}
+
+.dialog-name {
+    color: var(--pink2);
+    margin-bottom: 15px;
+    font-size: 10px;
+}
+
+#dialog-text {
+    font-size: 10px;
+    line-height: 2.2;
+    color: var(--cream);
+}
+
+#dialog-next {
+    margin-top: 15px;
+    color: #aaa;
+    font-size: 8px;
+}
+
+/* =========================
+   FINAL
+========================= */
+
+#final-screen {
+    display: none;
+}
+
+.final-title {
+    color: var(--yellow);
+    font-size: clamp(17px, 4vw, 29px);
+    line-height: 1.7;
+}
+
+.final-heart {
+    font-size: 70px;
+    margin: 20px;
+    animation: heartbeat 1s infinite;
+}
+
+.final-message {
+    color: var(--cream);
+    font-size: 11px;
+    line-height: 2.4;
+}
+
+@keyframes heartbeat {
+    0%,100% { transform: scale(1); }
+    50% { transform: scale(1.15); }
+}
+
+/* =========================
+   MOBILE CONTROLS
+========================= */
+
+#controls {
+    position: absolute;
+    bottom: 18px;
+    left: 18px;
+    z-index: 25;
+    display: none;
+    width: 145px;
+    height: 145px;
+}
+
+.control {
+    position: absolute;
+    width: 48px;
+    height: 48px;
+    border: 3px solid white;
+    background: rgba(18,13,28,.8);
+    color: white;
+    font-family: inherit;
+    font-size: 15px;
+}
+
+.control:active {
+    background: var(--pink);
+}
+
+#up {
+    left: 48px;
+    top: 0;
+}
+
+#left {
+    left: 0;
+    top: 48px;
+}
+
+#down {
+    left: 48px;
+    top: 48px;
+}
+
+#right {
+    left: 96px;
+    top: 48px;
+}
+
+@media (max-width: 700px) {
+    #controls {
+        display: block;
+    }
+
+    #hud {
+        top: 8px;
+        left: 8px;
+        right: 8px;
+    }
+
+    .hud-box {
+        font-size: 7px;
+        padding: 7px;
+    }
+
+    #dialog {
+        bottom: 15px;
+    }
+
+    .dialog-box {
+        padding: 13px;
+    }
+
+    #dialog-text {
+        font-size: 8px;
+    }
+
+    .panel {
+        padding: 25px 16px;
+    }
+
+    .subtitle {
+        font-size: 8px;
+    }
+}
+</style>
 </head>
 
 <body>
-    <h1></h1>
-   <button onclick="clicked()" class="btn">Click me</button>
-    <div class="container"> </div>
-        
-        
-</body>
+
+<div id="game-wrapper">
+
+    <canvas id="game"></canvas>
+
+    <!-- HUD -->
+    <div id="hud">
+        <div class="hud-box" id="title-hud">
+            ЧАМ РУУ ХҮРЭХ ЗАМ
+        </div>
+
+        <div class="hud-box">
+            <div id="hearts">♡ ♡ ♡</div>
+            <div id="stars">★ 0</div>
+        </div>
+    </div>
+
+    <!-- START -->
+    <div class="overlay" id="start-screen">
+        <div class="panel">
+
+            <div class="logo">
+                ЧАМ РУУ<br>
+                ХҮРЭХ ЗАМ
+            </div>
+
+            <div class="subtitle">
+                Нэг жижигхэн адал явдал.<br><br>
+
+                Замдаа хэдэн од цуглуулж,<br>
+                хэдэн нууц олж,<br>
+                эцэст нь нэг хүнд хүрнэ.
+            </div>
+
+            <button class="pixel-button" onclick="startGame()">
+                ▶ ЭХЛҮҮЛЭХ
+            </button>
+
+            <div style="margin-top:25px;font-size:7px;color:#777;">
+                WASD / ARROW KEYS
+            </div>
+
+        </div>
+    </div>
+
+    <!-- DIALOG -->
+    <div id="dialog">
+        <div class="dialog-box">
+
+            <div class="dialog-name" id="dialog-name">
+                ?
+            </div>
+
+            <div id="dialog-text">
+            </div>
+
+            <div id="dialog-next">
+                [ SPACE / TAP ] ҮРГЭЛЖЛҮҮЛЭХ
+            </div>
+
+        </div>
+    </div>
+
+    <!-- MOBILE CONTROLS -->
+    <div id="controls">
+
+        <button class="control" id="up">▲</button>
+        <button class="control" id="left">◀</button>
+        <button class="control" id="down">▼</button>
+        <button class="control" id="right">▶</button>
+
+    </div>
+
+    <!-- FINAL -->
+    <div class="overlay" id="final-screen">
+
+        <div class="panel">
+
+            <div class="final-title">
+                ★ АМЖИЛТЫН ШАГНАЛ ★
+            </div>
+
+            <div class="final-heart">
+                ♥
+            </div>
+
+            <div class="final-message">
+
+                Чи бүх замыг тууллаа.<br><br>
+
+                Бүх одыг цуглуулсан эсэх<br>
+                үнэндээ хамаагүй.
+                <br><br>
+
+                Учир нь энэ тоглоомын<br>
+                хамгийн гоё хэсэг нь...
+                <br><br>
+
+                <strong style="color:#ff86bd;">
+                    чамайг инээлгэх гэж хийсэн явдал.
+                </strong>
+
+                <br><br>
+
+                — нэг developer-ээс 💗
+
+            </div>
+
+            <br>
+
+            <button class="pixel-button" onclick="location.reload()">
+                ↻ ДАХИН ТОГЛОХ
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
 <script>
-    clicked = () => {
-        document.querySelector('h1').textContent = 'GAY!!!';
-        document.querySelector('.btn').style.backgroundColor = 'red';
-        document.querySelector('.btn').textContent = 'Zail';
-        document.querySelector('.container').innerHTML = '<img src="https://c.tenor.com/_wvp0xzvQQgAAAAd/tenor.gif">';
+
+/* =====================================================
+   SETTINGS — ЭНДЭЭС ӨӨРИЙНХӨӨРӨӨ ӨӨРЧИЛ
+===================================================== */
+
+const CRUSH_NAME = "НЭР";
+
+const NPC_MESSAGES = [
+    "Сайн уу! Чи энд юу хайж явна?",
+    "Энд нэг хүн чамайг хүлээж байгаа гэсэн.",
+    "Гэхдээ эхлээд замдаа хэдэн од цуглуулаарай.",
+    "Яагаад гэдгийг нь төгсгөлд мэднэ. :)"
+];
+
+/* =====================================================
+   CANVAS
+===================================================== */
+
+const canvas = document.getElementById("game");
+const ctx = canvas.getContext("2d");
+
+let W = 1000;
+let H = 650;
+
+function resize() {
+
+    const rect = canvas.getBoundingClientRect();
+
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+    canvas.width = rect.width * dpr;
+    canvas.height = rect.height * dpr;
+
+    ctx.setTransform(
+        dpr * rect.width / W,
+        0,
+        0,
+        dpr * rect.height / H,
+        0,
+        0
+    );
+}
+
+window.addEventListener("resize", resize);
+
+/* =====================================================
+   GAME STATE
+===================================================== */
+
+let running = false;
+let finished = false;
+
+const player = {
+    x: 110,
+    y: 520,
+    w: 28,
+    h: 28,
+    speed: 3.5,
+    frame: 0
+};
+
+let starsCollected = 0;
+
+const keys = {};
+
+let stars = [
+    {x:230, y:440, taken:false},
+    {x:350, y:300, taken:false},
+    {x:510, y:470, taken:false},
+    {x:650, y:250, taken:false},
+    {x:780, y:410, taken:false},
+    {x:870, y:180, taken:false}
+];
+
+const npc = {
+    x: 450,
+    y: 160,
+    w: 28,
+    h: 38
+};
+
+const goal = {
+    x: 875,
+    y: 95,
+    w: 45,
+    h: 45
+};
+
+/* =====================================================
+   AUDIO
+===================================================== */
+
+let audioCtx;
+
+function beep(freq = 440, duration = .08) {
+
+    try {
+
+        if (!audioCtx)
+            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+
+        osc.frequency.value = freq;
+        osc.type = "square";
+
+        gain.gain.setValueAtTime(.04, audioCtx.currentTime);
+
+        gain.gain.exponentialRampToValueAtTime(
+            .001,
+            audioCtx.currentTime + duration
+        );
+
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+
+        osc.start();
+        osc.stop(audioCtx.currentTime + duration);
+
+    } catch(e) {}
+
+}
+
+/* =====================================================
+   START
+===================================================== */
+
+function startGame() {
+
+    document.getElementById("start-screen").style.display = "none";
+
+    running = true;
+
+    beep(660);
+    setTimeout(() => beep(880), 100);
+
+    requestAnimationFrame(loop);
+}
+
+/* =====================================================
+   INPUT
+===================================================== */
+
+window.addEventListener("keydown", e => {
+
+    keys[e.key.toLowerCase()] = true;
+
+    if (e.code === "Space") {
+
+        if (document.getElementById("dialog").style.display === "block") {
+
+            document.getElementById("dialog").style.display = "none";
+
+        }
+
     }
+
+});
+
+window.addEventListener("keyup", e => {
+    keys[e.key.toLowerCase()] = false;
+});
+
+/* Mobile buttons */
+
+function bindControl(id, key) {
+
+    const button = document.getElementById(id);
+
+    button.addEventListener("pointerdown", e => {
+
+        e.preventDefault();
+
+        keys[key] = true;
+
+    });
+
+    button.addEventListener("pointerup", e => {
+
+        e.preventDefault();
+
+        keys[key] = false;
+
+    });
+
+    button.addEventListener("pointercancel", () => {
+        keys[key] = false;
+    });
+
+    button.addEventListener("pointerleave", () => {
+        keys[key] = false;
+    });
+}
+
+bindControl("up","arrowup");
+bindControl("down","arrowdown");
+bindControl("left","arrowleft");
+bindControl("right","arrowright");
+
+/* =====================================================
+   UPDATE
+===================================================== */
+
+function update() {
+
+    if (!running || finished)
+        return;
+
+    let dx = 0;
+    let dy = 0;
+
+    if (keys["w"] || keys["arrowup"])
+        dy -= 1;
+
+    if (keys["s"] || keys["arrowdown"])
+        dy += 1;
+
+    if (keys["a"] || keys["arrowleft"])
+        dx -= 1;
+
+    if (keys["d"] || keys["arrowright"])
+        dx += 1;
+
+    if (dx !== 0 || dy !== 0) {
+
+        const length = Math.sqrt(dx*dx + dy*dy);
+
+        dx /= length;
+        dy /= length;
+
+        player.x += dx * player.speed;
+        player.y += dy * player.speed;
+
+        player.frame += .2;
+
+    }
+
+    /* Boundaries */
+
+    player.x = Math.max(30, Math.min(W - 55, player.x));
+    player.y = Math.max(90, Math.min(H - 45, player.y));
+
+    /* Collect stars */
+
+    stars.forEach(star => {
+
+        if (star.taken)
+            return;
+
+        const dist = Math.hypot(
+            player.x - star.x,
+            player.y - star.y
+        );
+
+        if (dist < 30) {
+
+            star.taken = true;
+            starsCollected++;
+
+            document.getElementById("stars").textContent =
+                "★ " + starsCollected;
+
+            beep(880);
+            setTimeout(() => beep(1200), 70);
+
+        }
+
+    });
+
+    /* NPC */
+
+    const npcDistance = Math.hypot(
+        player.x - npc.x,
+        player.y - npc.y
+    );
+
+    if (npcDistance < 45) {
+
+        showDialog();
+
+    }
+
+    /* Goal */
+
+    const goalDistance = Math.hypot(
+        player.x - goal.x,
+        player.y - goal.y
+    );
+
+    if (goalDistance < 55) {
+
+        finishGame();
+
+    }
+
+}
+
+/* =====================================================
+   DIALOG
+===================================================== */
+
+let dialogShown = false;
+
+function showDialog() {
+
+    if (dialogShown)
+        return;
+
+    dialogShown = true;
+
+    document.getElementById("dialog").style.display = "block";
+
+    document.getElementById("dialog-name").textContent =
+        "???";
+
+    document.getElementById("dialog-text").innerHTML =
+        NPC_MESSAGES.join("<br><br>");
+
+    beep(520);
+
+    setTimeout(() => {
+
+        document.getElementById("dialog").style.display = "none";
+
+        dialogShown = false;
+
+    }, 7000);
+
+}
+
+/* =====================================================
+   FINAL
+===================================================== */
+
+function finishGame() {
+
+    if (finished)
+        return;
+
+    finished = true;
+
+    beep(523);
+
+    setTimeout(() => beep(659), 120);
+
+    setTimeout(() => beep(784), 240);
+
+    setTimeout(() => {
+
+        document.getElementById("final-screen")
+            .style.display = "flex";
+
+    }, 500);
+
+}
+
+/* =====================================================
+   DRAW
+===================================================== */
+
+function draw() {
+
+    ctx.clearRect(0,0,W,H);
+
+    drawBackground();
+    drawRoad();
+    drawStars();
+    drawNPC();
+    drawGoal();
+    drawPlayer();
+
+}
+
+/* =====================================================
+   BACKGROUND
+===================================================== */
+
+function drawBackground() {
+
+    /* Sky */
+
+    ctx.fillStyle = "#171126";
+    ctx.fillRect(0,0,W,H);
+
+    /* Moon */
+
+    ctx.fillStyle = "#ffeab0";
+    ctx.fillRect(760,75,34,34);
+
+    ctx.fillStyle = "#171126";
+    ctx.fillRect(772,68,34,34);
+
+    /* Stars in sky */
+
+    const skyStars = [
+        [90,120],[160,170],[270,110],[380,80],
+        [540,115],[630,75],[720,155],
+        [840,130],[930,75]
+    ];
+
+    ctx.fillStyle = "#fff2c9";
+
+    skyStars.forEach(([x,y]) => {
+
+        ctx.fillRect(x,y,3,3);
+
+    });
+
+    /* Mountains */
+
+    ctx.fillStyle = "#282044";
+
+    ctx.beginPath();
+
+    ctx.moveTo(0,400);
+    ctx.lineTo(170,210);
+    ctx.lineTo(300,390);
+    ctx.lineTo(470,190);
+    ctx.lineTo(650,400);
+    ctx.lineTo(800,230);
+    ctx.lineTo(1000,390);
+    ctx.lineTo(1000,650);
+    ctx.lineTo(0,650);
+
+    ctx.fill();
+
+    /* Ground */
+
+    ctx.fillStyle = "#233b31";
+    ctx.fillRect(0,380,W,H-380);
+
+    /* Grass pixels */
+
+    ctx.fillStyle = "#31513d";
+
+    for(let x=0; x<W; x+=35) {
+
+        const y = 400 + ((x*17)%90);
+
+        ctx.fillRect(x,y,4,10);
+        ctx.fillRect(x+8,y+5,3,7);
+
+    }
+
+}
+
+/* =====================================================
+   ROAD
+===================================================== */
+
+function drawRoad() {
+
+    ctx.fillStyle = "#604d48";
+
+    ctx.beginPath();
+
+    ctx.moveTo(70,570);
+    ctx.lineTo(360,470);
+    ctx.lineTo(570,390);
+    ctx.lineTo(760,280);
+    ctx.lineTo(910,120);
+
+    ctx.lineTo(1000,160);
+    ctx.lineTo(800,340);
+    ctx.lineTo(600,450);
+    ctx.lineTo(390,530);
+    ctx.lineTo(100,620);
+
+    ctx.closePath();
+
+    ctx.fill();
+
+    /* Road highlights */
+
+    ctx.strokeStyle = "#80665b";
+    ctx.lineWidth = 4;
+    ctx.setLineDash([18,18]);
+
+    ctx.beginPath();
+
+    ctx.moveTo(110,580);
+    ctx.lineTo(390,500);
+    ctx.lineTo(590,420);
+    ctx.lineTo(770,315);
+    ctx.lineTo(900,170);
+
+    ctx.stroke();
+
+    ctx.setLineDash([]);
+
+}
+
+/* =====================================================
+   STARS
+===================================================== */
+
+function drawStars() {
+
+    stars.forEach(star => {
+
+        if (star.taken)
+            return;
+
+        const pulse =
+            Math.sin(Date.now()/200 + star.x) * 3;
+
+        drawPixelStar(
+            star.x,
+            star.y + pulse,
+            "#ffd75a"
+        );
+
+    });
+
+}
+
+function drawPixelStar(x,y,color) {
+
+    ctx.fillStyle = color;
+
+    ctx.fillRect(x-3,y-12,6,24);
+    ctx.fillRect(x-12,y-3,24,6);
+
+    ctx.fillRect(x-7,y-7,14,14);
+
+    ctx.fillStyle = "#fff4a5";
+
+    ctx.fillRect(x-3,y-6,6,6);
+
+}
+
+/* =====================================================
+   NPC
+===================================================== */
+
+function drawNPC() {
+
+    /* Shadow */
+
+    ctx.fillStyle = "rgba(0,0,0,.35)";
+    ctx.fillRect(npc.x-15,npc.y+27,32,7);
+
+    /* Body */
+
+    ctx.fillStyle = "#ff4f9a";
+    ctx.fillRect(npc.x-13,npc.y+5,26,24);
+
+    /* Head */
+
+    ctx.fillStyle = "#f5c9a5";
+    ctx.fillRect(npc.x-12,npc.y-12,24,20);
+
+    /* Hair */
+
+    ctx.fillStyle = "#34203d";
+    ctx.fillRect(npc.x-14,npc.y-15,28,9);
+    ctx.fillRect(npc.x-14,npc.y-9,5,10);
+
+    /* Eyes */
+
+    ctx.fillStyle = "#201522";
+    ctx.fillRect(npc.x-7,npc.y-4,3,3);
+    ctx.fillRect(npc.x+5,npc.y-4,3,3);
+
+    /* Legs */
+
+    ctx.fillStyle = "#292342";
+    ctx.fillRect(npc.x-10,npc.y+29,8,12);
+    ctx.fillRect(npc.x+3,npc.y+29,8,12);
+
+}
+
+/* =====================================================
+   GOAL
+===================================================== */
+
+function drawGoal() {
+
+    const pulse =
+        Math.sin(Date.now()/250) * 5;
+
+    ctx.fillStyle = "rgba(255,79,154,.2)";
+
+    ctx.fillRect(
+        goal.x-15-pulse/2,
+        goal.y-15-pulse/2,
+        goal.w+30+pulse,
+        goal.h+30+pulse
+    );
+
+    /* Portal */
+
+    ctx.strokeStyle = "#ff86bd";
+    ctx.lineWidth = 5;
+
+    ctx.strokeRect(
+        goal.x,
+        goal.y,
+        goal.w,
+        goal.h
+    );
+
+    ctx.fillStyle = "#ff4f9a";
+
+    ctx.fillRect(
+        goal.x+10,
+        goal.y+10,
+        goal.w-20,
+        goal.h-20
+    );
+
+    ctx.fillStyle = "white";
+    ctx.font = "10px 'Press Start 2P'";
+    ctx.fillText("♥", goal.x+15, goal.y+31);
+
+}
+
+/* =====================================================
+   PLAYER
+===================================================== */
+
+function drawPlayer() {
+
+    const bounce =
+        Math.sin(player.frame) * 2;
+
+    const x = player.x;
+    const y = player.y + bounce;
+
+    /* Shadow */
+
+    ctx.fillStyle = "rgba(0,0,0,.4)";
+    ctx.fillRect(x-14,y+25,28,7);
+
+    /* Body */
+
+    ctx.fillStyle = "#63c174";
+    ctx.fillRect(x-12,y+4,24,22);
+
+    /* Backpack */
+
+    ctx.fillStyle = "#a86b42";
+    ctx.fillRect(x-16,y+7,5,18);
+
+    /* Head */
+
+    ctx.fillStyle = "#f3c7a4";
+    ctx.fillRect(x-11,y-12,22,19);
+
+    /* Hair */
+
+    ctx.fillStyle = "#2a2034";
+    ctx.fillRect(x-13,y-15,26,8);
+
+    /* Eyes */
+
+    ctx.fillStyle = "#15111c";
+    ctx.fillRect(x-7,y-3,3,3);
+    ctx.fillRect(x+5,y-3,3,3);
+
+    /* Legs */
+
+    ctx.fillStyle = "#30304b";
+
+    if(Math.floor(player.frame)%2 === 0) {
+
+        ctx.fillRect(x-9,y+26,7,13);
+        ctx.fillRect(x+4,y+29,7,10);
+
+    } else {
+
+        ctx.fillRect(x-9,y+29,7,10);
+        ctx.fillRect(x+4,y+26,7,13);
+
+    }
+
+}
+
+/* =====================================================
+   LOOP
+===================================================== */
+
+function loop() {
+
+    update();
+    draw();
+
+    if (running)
+        requestAnimationFrame(loop);
+
+}
+
+resize();
+
 </script>
 
+</body>
 </html>
